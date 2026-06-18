@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin — Vértice Gin</title>
+  <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400;1,700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚙️</text></svg>">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --naranja: #FF6600; --naranja-hover: #E55A00; --naranja-light: #FF8533;
+      --carbon: #2D2926; --crema: #EADCCF; --blanco: #fff; --arena: #D4A574;
+      --madera: #5D4E37; --verde-bosque: #4D7C3F;
+      --cobre: var(--naranja); --cobre-hover: var(--naranja-hover); --cobre-brillo: var(--naranja-light);
+      --crema-madera: var(--crema); --verde: var(--verde-bosque);
+      --text-muted: #9B8B7A;
+      --font-heading: 'Courier Prime', monospace;
+      --font-body: 'DM Sans', sans-serif;
+      --radius: 10px;
+      --shadow: 0 2px 12px rgba(0,0,0,0.06);
+      --transition: 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    body {
+      font-family: var(--font-body);
+      background: var(--crema);
+      color: var(--carbon);
+      min-height: 100vh;
+    }
+
+    .admin-header {
+      background: var(--carbon);
+      padding: 14px 24px;
+      display: flex; align-items: center; justify-content: space-between;
+      position: sticky; top: 0; z-index: 100;
+    }
+    .admin-header h1 {
+      font-family: var(--font-heading);
+      font-size: 20px; color: var(--naranja-light);
+    }
+    .admin-header .links { display: flex; gap: 16px; align-items: center; }
+    .admin-header .links a {
+      color: var(--arena); font-size: 13px; text-decoration: none;
+      transition: var(--transition);
+    }
+    .admin-header .links a:hover { color: var(--naranja-light); }
+
+    .tabs {
+      display: flex; gap: 0;
+      background: var(--blanco);
+      border-bottom: 1px solid rgba(0,0,0,0.05);
+      padding: 0 20px;
+      position: sticky; top: 58px; z-index: 90;
+      overflow-x: auto;
+    }
+    .tab-btn {
+      padding: 14px 22px;
+      font-family: var(--font-body);
+      font-size: 13px; font-weight: 600;
+      color: var(--text-muted);
+      background: none; border: none;
+      cursor: pointer;
+      border-bottom: 2.5px solid transparent;
+      transition: var(--transition);
+      white-space: nowrap;
+    }
+    .tab-btn:hover { color: var(--carbon); }
+    .tab-btn.active { color: var(--cobre); border-bottom-color: var(--cobre); }
+
+    .tab-content { display: none; padding: 24px; max-width: 1200px; margin: 0 auto; }
+    .tab-content.active { display: block; }
+
+    .section-header {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 20px; flex-wrap: wrap; gap: 12px;
+    }
+    .section-header h2 {
+      font-family: var(--font-heading); font-size: 22px;
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+      background: var(--blanco);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(0,0,0,0.03);
+    }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    th, td { padding: 12px 16px; text-align: left; border-bottom: 1px solid rgba(0,0,0,0.03); }
+    th {
+      background: var(--crema);
+      font-weight: 600; color: var(--madera);
+      font-size: 11px; text-transform: uppercase; letter-spacing: 0.6px;
+      white-space: nowrap;
+    }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: rgba(139,105,20,0.02); }
+
+    .btn {
+      padding: 8px 18px; border-radius: var(--radius); border: none;
+      font-family: var(--font-body); font-size: 12px; font-weight: 600;
+      cursor: pointer; transition: var(--transition);
+      display: inline-flex; align-items: center; gap: 6px;
+      text-decoration: none;
+    }
+    .btn-primary { background: var(--carbon); color: var(--blanco); }
+    .btn-primary:hover { background: var(--cobre); }
+    .btn-sm { padding: 5px 12px; font-size: 11px; border-radius: 8px; }
+    .btn-success { background: var(--verde); color: var(--blanco); }
+    .btn-success:hover { background: #4D6B3E; }
+    .btn-danger { background: #B00020; color: var(--blanco); }
+    .btn-danger:hover { background: #8F001A; }
+    .btn-outline { background: transparent; border: 1.5px solid rgba(0,0,0,0.08); color: var(--madera); }
+    .btn-outline:hover { border-color: var(--cobre); color: var(--cobre); }
+
+    .modal-overlay {
+      position: fixed; inset: 0; z-index: 200;
+      background: rgba(0,0,0,0.4); backdrop-filter: blur(6px);
+      display: none; align-items: center; justify-content: center;
+    }
+    .modal-overlay.open { display: flex; }
+    .modal-box {
+      background: var(--blanco); border-radius: var(--radius);
+      padding: 28px 24px; width: calc(100% - 32px); max-width: 500px;
+      max-height: 85vh; overflow-y: auto;
+      box-shadow: 0 24px 80px rgba(0,0,0,0.15);
+      animation: modalIn 0.25s ease;
+    }
+    @keyframes modalIn { from { opacity: 0; transform: scale(0.95) translateY(8px); } to { opacity: 1; transform: scale(1) translateY(0); } }
+    .modal-box h3 { font-family: var(--font-heading); font-size: 20px; margin-bottom: 20px; }
+    .form-group { margin-bottom: 14px; }
+    .form-group label {
+      display: block; font-size: 11px; font-weight: 600;
+      color: var(--text-muted); margin-bottom: 4px;
+      text-transform: uppercase; letter-spacing: 0.6px;
+    }
+    .form-group input, .form-group textarea, .form-group select {
+      width: 100%; padding: 10px 12px;
+      border: 1.5px solid rgba(0,0,0,0.06); border-radius: 8px;
+      font-family: var(--font-body); font-size: 14px;
+      background: var(--crema); outline: none; transition: var(--transition);
+    }
+    .form-group input:focus, .form-group textarea:focus, .form-group select:focus {
+      border-color: var(--cobre); background: var(--blanco);
+      box-shadow: 0 0 0 3px rgba(139,105,20,0.08);
+    }
+    .modal-actions { display: flex; gap: 10px; margin-top: 20px; justify-content: flex-end; }
+
+    .status-badge {
+      display: inline-block; padding: 3px 10px; border-radius: 8px;
+      font-size: 11px; font-weight: 600;
+    }
+    .status-Pendiente { background: #FFF3CD; color: #856404; }
+    .status-Confirmado { background: #D1ECF1; color: #0C5460; }
+    .status-EnPreparacion { background: #CCE5FF; color: #004085; }
+    .status-Enviado { background: #D4EDDA; color: #155724; }
+    .status-Entregado { background: #D4EDDA; color: #155724; }
+    .status-Cancelado { background: #F8D7DA; color: #721C24; }
+
+    .empty-state { text-align: center; padding: 60px 20px; }
+    .empty-state p { color: var(--text-muted); font-size: 14px; }
+
+    .toast-notification {
+      position: fixed; bottom: 24px; left: 50%; z-index: 500;
+      transform: translateX(-50%) translateY(80px);
+      background: var(--carbon); color: var(--blanco);
+      padding: 12px 24px; border-radius: var(--radius);
+      font-size: 14px; font-weight: 500;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+      opacity: 0; transition: all 0.4s ease;
+      pointer-events: none;
+    }
+    .toast-notification.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    .config-grid { display: grid; gap: 16px; max-width: 500px; }
+    .card {
+      background: var(--blanco); border-radius: var(--radius);
+      padding: 24px; box-shadow: var(--shadow);
+      border: 1px solid rgba(0,0,0,0.03);
+    }
+    .card h3 { font-family: var(--font-heading); font-size: 17px; margin-bottom: 16px; }
+
+    .json-actions {
+      display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px;
+    }
+
+    @media (max-width: 640px) {
+      .tab-content { padding: 14px; }
+      th, td { padding: 8px; font-size: 11px; }
+      .admin-header { padding: 12px 14px; }
+      .tab-btn { padding: 12px 14px; font-size: 12px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="admin-header">
+    <h1>Panel Admin</h1>
+    <div class="links">
+      <a href="../">← Ver tienda</a>
+      <a href="pedidos.html" target="_blank">Pedidos</a>
+    </div>
+  </header>
+
+  <nav class="tabs">
+    <button class="tab-btn active" data-tab="productos">Productos</button>
+    <button class="tab-btn" data-tab="pedidos">Pedidos</button>
+    <button class="tab-btn" data-tab="config">Configuración</button>
+  </nav>
+
+  <section class="tab-content active" id="tab-productos">
+    <div class="section-header">
+      <h2>Productos</h2>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;">
+        <button class="btn btn-primary" id="addProductBtn">+ Agregar</button>
+        <button class="btn btn-outline" id="exportJsonBtn">📥 Exportar JSON</button>
+        <button class="btn btn-outline" id="importJsonBtn">📤 Importar JSON</button>
+      </div>
+    </div>
+    <input type="file" id="jsonFileInput" accept=".json" style="display:none">
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Precio</th>
+            <th>Categoría</th>
+            <th>Stock</th>
+            <th>Activo</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody id="productTableBody"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="tab-content" id="tab-pedidos">
+    <div class="section-header">
+      <h2>Pedidos</h2>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Fecha</th>
+            <th>Cliente</th>
+            <th>Teléfono</th>
+            <th>Productos</th>
+            <th>Total</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody id="orderTableBody"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="tab-content" id="tab-config">
+    <div class="section-header">
+      <h2>Configuración</h2>
+    </div>
+    <div class="card" style="max-width:600px;">
+      <h3>WhatsApp</h3>
+      <div class="config-grid">
+        <div class="form-group">
+          <label>Número de WhatsApp (código país + código área + número, sin +)</label>
+          <input type="text" id="cfg-whatsapp" placeholder="5491123456789">
+        </div>
+        <div class="form-group">
+          <label>Info de delivery (se muestra al final del pedido)</label>
+          <textarea id="cfg-delivery" rows="2" placeholder="Ej: Envíos a todo el país. Consultá por tu zona."></textarea>
+        </div>
+        <div>
+          <button class="btn btn-primary" id="saveConfigBtn">Guardar</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="modal-overlay" id="productModal">
+    <div class="modal-box">
+      <h3 id="productModalTitle">Agregar Producto</h3>
+      <input type="hidden" id="editProductId">
+      <div class="form-group"><label>Nombre</label><input type="text" id="prod-nombre"></div>
+      <div class="form-group"><label>Subtítulo</label><input type="text" id="prod-subtitulo" placeholder="Ej: 42% ABV · 750 ml"></div>
+      <div class="form-group"><label>Descripción</label><textarea id="prod-descripcion" rows="3"></textarea></div>
+      <div class="form-group"><label>Precio ($)</label><input type="number" id="prod-precio" step="1"></div>
+      <div class="form-group"><label>Categoría</label><input type="text" id="prod-categoria" placeholder="Ej: Gin, Combos"></div>
+      <div class="form-group"><label>Stock (-1 = ilimitado, 0 = sin stock)</label><input type="number" id="prod-stock" value="-1"></div>
+      <div class="form-group"><label>Emoji / Icono</label><input type="text" id="prod-imagen" placeholder="🍸" maxlength="4"></div>
+      <div class="modal-actions">
+        <button class="btn btn-outline" id="cancelProductBtn">Cancelar</button>
+        <button class="btn btn-primary" id="saveProductBtn">Guardar</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="orderModal">
+    <div class="modal-box">
+      <h3>Detalle del Pedido</h3>
+      <div id="orderDetailContent"></div>
+      <div class="modal-actions">
+        <button class="btn btn-outline" id="closeOrderModal">Cerrar</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast-notification" id="toast"></div>
+
+  <script src="../js/productos.js"></script>
+  <script src="../js/admin.js"></script>
+</body>
+</html>

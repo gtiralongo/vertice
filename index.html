@@ -63,7 +63,7 @@
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400;1,700&family=DM+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
 
   <!-- Styles -->
   <link rel="stylesheet" href="css/style.css">
@@ -79,7 +79,7 @@
       <h2>¿Sos mayor de 18 años?</h2>
       <p>Para disfrutar Vértice Gin necesitás ser mayor de edad. Consumí con responsabilidad.</p>
       <div class="age-gate__actions">
-        <button id="verify-age" class="btn btn--cobre btn--lg">Sí, soy mayor</button>
+        <button id="verify-age" class="btn btn--primary btn--lg">Sí, soy mayor</button>
         <button id="deny-age" class="btn btn--outline btn--lg">No</button>
       </div>
     </div>
@@ -110,56 +110,58 @@
   <div class="nav-overlay"></div>
 
   <!-- ===== HERO ===== -->
-  <section class="hero">
-    <div class="hero__bg"></div>
-    <div class="hero__content">
-      <div class="hero__label">Destilado Artesanal · Pasteur, Lincoln</div>
-      <h1>
-        Vértice
-        <span>Gin de Pueblo</span>
-      </h1>
-      <p>Nacido en Pasteur, destilado en cobre con botánicos de la plaza. Un gin con historia, encuentro y sabor a pueblo.</p>
-      <div class="hero__actions">
-        <a href="pages/pedidos.html" class="btn btn--cobre btn--lg">Hacé tu pedido</a>
-        <a href="pages/producto.html" class="btn btn--outline-light btn--lg">Conocé nuestro gin</a>
-      </div>
+<section class="hero">
+  <div class="hero__bg"></div>
+  <div class="section__vertex-bg"></div>
+  <div class="hero__content">
+    <div class="hero__label">Destilado Artesanal · Pasteur, Lincoln</div>
+    <h1>
+      Vértice
+      <span>Gin de Pueblo</span>
+    </h1>
+    <p>Nacido en Pasteur, destilado en cobre con botánicos de la plaza. Un gin con historia, encuentro y sabor a pueblo.</p>
+    <div class="hero__actions">
+      <a href="pages/pedidos.html" class="btn btn--primary btn--lg">Hacé tu pedido</a>
+      <a href="pages/producto.html" class="btn btn--outline-light btn--lg">Conocé nuestro gin</a>
     </div>
-    <div class="scroll-indicator">
-      <span>Descubrí</span>
-      <div class="scroll-indicator__dot"></div>
-    </div>
-  </section>
+  </div>
+  <div class="scroll-indicator">
+    <span>Descubrí</span>
+    <div class="scroll-indicator__dot"></div>
+  </div>
+</section>
 
-  <!-- ===== VALUE PROPS ===== -->
-  <section class="section">
-    <div class="container">
-      <div class="section__header fade-in">
-        <p class="subtitle">Nuestra esencia</p>
-        <h2>Destilamos pueblo, encuentro y tradición</h2>
-        <p>Tres pilares que hacen de Vértice algo único. No es solo gin: es la historia de Pasteur en cada botella.</p>
+<!-- ===== VALUE PROPS ===== -->
+<section class="section section--framed">
+  <div class="container">
+    <div class="section__header fade-in">
+      <p class="subtitle">Nuestra esencia</p>
+      <h2>Destilamos pueblo, encuentro y tradición</h2>
+      <p>Tres pilares que hacen de Vértice algo único. No es solo gin: es la historia de Pasteur en cada botella.</p>
+    </div>
+    <div class="values">
+      <div class="value-card fade-in">
+        <div class="value-card__icon">🌿</div>
+        <h3>Origen con identidad</h3>
+        <p>Pasteur, un pueblo de 2000 habitantes en el vértice de Lincoln. Ahí nacimos. La mitad de nuestros botánicos —quinotos y naranjas amargas— se cosechan de la plaza del pueblo.</p>
       </div>
-      <div class="values">
-        <div class="value-card fade-in">
-          <div class="value-card__icon">🌿</div>
-          <h3>Origen con identidad</h3>
-          <p>Pasteur, un pueblo de 2000 habitantes en el vértice de Lincoln. Ahí nacimos. La mitad de nuestros botánicos —quinotos y naranjas amargas— se cosechan de la plaza del pueblo.</p>
-        </div>
-        <div class="value-card fade-in">
-          <div class="value-card__icon">⚗️</div>
-          <h3>Proceso artesanal real</h3>
-          <p>Alambique de cobre de 20 litros. Producción de 70 botellas por semana. Cada botella numerada, cada lote controlado. No somos industria: somos small batch de verdad.</p>
-        </div>
-        <div class="value-card fade-in">
-          <div class="value-card__icon">🤝</div>
-          <h3>Encuentros que inspiran</h3>
-          <p>Vértice nació de una tarde de pileta y un asado entre amigos. Cada botella lleva esa energía: la de los brindis, las charlas largas y los atardeceres en el campo.</p>
-        </div>
+      <div class="value-card fade-in">
+        <div class="value-card__icon">⚗️</div>
+        <h3>Proceso artesanal real</h3>
+        <p>Alambique de cobre de 20 litros. Producción de 70 botellas por semana. Cada botella numerada, cada lote controlado. No somos industria: somos small batch de verdad.</p>
+      </div>
+      <div class="value-card fade-in">
+        <div class="value-card__icon">🤝</div>
+        <h3>Encuentros que inspiran</h3>
+        <p>Vértice nació de una tarde de pileta y un asado entre amigos. Cada botella lleva esa energía: la de los brindis, las charlas largas y los atardeceres en el campo.</p>
       </div>
     </div>
-  </section>
+  </div>
+</section>
 
   <!-- ===== STORY SNEAK PEEK ===== -->
   <section class="section section--cream">
+    <div class="section__wood"></div>
     <div class="container">
       <div class="story-grid fade-in">
         <div class="story-grid__media">
@@ -173,7 +175,7 @@
           <h2>De un alambique de 5 litros a tu copa</h2>
           <p>Emmanuel, Gonzalo, Ezequiel y Silvio. Cuatro amigos, una tarde de pileta en Pasteur, pandemia, y la idea que cambió todo: <em>¿y si hacemos nuestro propio gin?</em></p>
           <p>Gonzalo había hecho un curso de destilería. Consiguieron un alambique de cobre de 5 litros. La primera fórmula salió exactamente como la imaginaban. Dos años después, producen 70 botellas por semana y ganaron el primer premio de <strong>Lincoln Impulsa</strong>.</p>
-          <a href="pages/historia.html" class="btn btn--cobre">Leer la historia completa</a>
+          <a href="pages/historia.html" class="btn btn--primary">Leer la historia completa</a>
         </div>
       </div>
     </div>
@@ -224,7 +226,7 @@
           <p style="color:var(--text-secondary);font-size:0.925rem;">
             Un gin equilibrado, con presencia del enebro clásico y un giro cítrico único gracias a los quinotos y naranjas amargas cosechados en la plaza de Pasteur. Ideal para gin tonic clásico o cócteles de autor.
           </p>
-          <a href="pages/producto.html" class="btn btn--cobre">Ver ficha completa</a>
+          <a href="pages/producto.html" class="btn btn--primary">Ver ficha completa</a>
         </div>
       </div>
     </div>
@@ -234,11 +236,11 @@
   <section class="section section--dark">
     <div class="container">
       <div class="cta-section fade-in">
-        <p class="subtitle" style="color:var(--cobre-brillo);">¿Ya lo querés probar?</p>
+        <p class="subtitle" style="color:var(--naranja-light);">¿Ya lo querés probar?</p>
         <h2>Pedí tu Vértice Gin</h2>
         <p>Escribinos por WhatsApp si tenés dudas, o hacé tu pedido directo desde nuestra tienda online.</p>
         <div style="display:flex;gap:var(--space-sm);justify-content:center;flex-wrap:wrap;">
-          <a href="pages/pedidos.html" class="btn btn--cobre btn--lg">🛒 Hacé tu pedido</a>
+          <a href="pages/pedidos.html" class="btn btn--primary btn--lg">🛒 Hacé tu pedido</a>
           <a href="#" class="btn btn--outline-light btn--lg" data-wa data-wa-message="Hola Vértice! Tengo una consulta sobre el gin." data-wa-location="cta-home">
             💬 Consultar por WhatsApp
           </a>
@@ -255,7 +257,7 @@
         <p>Recibí novedades, recetas y relatos de Pasteur. Una vez cada dos semanas, sin spam.</p>
         <form id="newsletter-form" class="newsletter__form">
           <input type="email" placeholder="tu@email.com" required aria-label="Tu correo electrónico">
-          <button type="submit" class="btn btn--cobre">Suscribirme</button>
+          <button type="submit" class="btn btn--primary">Suscribirme</button>
         </form>
       </div>
     </div>
@@ -268,7 +270,7 @@
         <div class="footer__brand">
           <a href="/" class="header__logo">
             Vértice
-            <span class="header__logo--accent" style="color:var(--cobre-brillo);">Gin de Pueblo</span>
+            <span class="header__logo--accent" style="color:var(--naranja-light);">Gin de Pueblo</span>
           </a>
           <p>Destilado artesanal en Pasteur, Lincoln, Provincia de Buenos Aires. Hecho por cuatro amigos con alambique de cobre y botánicos de la plaza.</p>
           <div class="footer__social">

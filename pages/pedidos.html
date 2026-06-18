@@ -7,160 +7,102 @@
   <meta name="description" content="Pedí Vértice Gin directo desde nuestra tienda oficial. Seleccioná tu producto, completá tus datos y te contactamos para coordinar el envío.">
   <meta name="keywords" content="comprar vertice gin, pedir gin artesanal, tienda gin pasteur, pedido gin argentina">
   <link rel="canonical" href="https://verticegin.com.ar/pages/pedidos.html">
-
   <meta property="og:type" content="website">
   <meta property="og:title" content="Pedí Vértice Gin — Tienda Oficial">
   <meta property="og:description" content="Seleccioná tu producto, completá tus datos y recibí Vértice Gin en tu casa.">
   <meta property="og:url" content="https://verticegin.com.ar/pages/pedidos.html">
   <meta property="og:image" content="https://verticegin.com.ar/images/og-pedidos.jpg">
   <meta property="og:locale" content="es_AR">
-
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400;1,700&family=DM+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../css/style.css">
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍸</text></svg>">
-
   <style>
-    /* Store-specific styles */
-    .order-layout {
+    .productos-grid {
       display: grid;
-      grid-template-columns: 1fr 360px;
-      gap: var(--space-2xl);
-      align-items: start;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: var(--space-lg);
     }
-    @media (max-width: 900px) {
-      .order-layout { grid-template-columns: 1fr; }
-    }
-
-    .order-steps {
-      display: flex;
-      gap: 0.25rem;
-      margin-bottom: var(--space-xl);
-      justify-content: center;
-    }
-    .step-indicator {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      padding: 0.5rem 1rem;
-      border-radius: var(--radius-full);
-      font-size: 0.8rem;
-      font-weight: 500;
-      color: var(--text-muted);
-      background: transparent;
-      transition: all var(--duration-fast) var(--ease-out);
-      cursor: default;
-    }
-    .step-indicator__num {
-      width: 24px; height: 24px;
-      border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 0.75rem; font-weight: 700;
-      border: 2px solid var(--text-muted);
-      color: var(--text-muted);
-      transition: all var(--duration-fast) var(--ease-out);
-    }
-    .step-indicator--active {
-      color: var(--cobre);
-      background: rgba(139, 105, 20, 0.06);
-    }
-    .step-indicator--active .step-indicator__num {
-      background: var(--cobre);
-      border-color: var(--cobre);
-      color: var(--crema);
-    }
-    .step-indicator--done .step-indicator__num {
-      background: var(--verde);
-      border-color: var(--verde);
-      color: white;
-    }
-    .step-indicator--done { color: var(--verde); }
-    @media (max-width: 600px) {
-      .step-indicator span:not(.step-indicator__num) { display: none; }
-    }
-
-    .order-step { display: none; }
-    .order-step--active { display: block; animation: fadeInUp 0.4s var(--ease-out) both; }
-
-    .order-card {
+    .producto-card {
       background: var(--blanco);
       border: 1px solid rgba(45,41,38,0.06);
       border-radius: var(--radius-md);
       padding: var(--space-lg);
+      display: flex;
+      flex-direction: column;
+      transition: transform var(--duration-fast) var(--ease-out), box-shadow var(--duration-fast) var(--ease-out);
+    }
+    .producto-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-md);
+    }
+    .producto-card__icon {
+      font-size: 2.5rem;
+      margin-bottom: var(--space-sm);
+    }
+    .producto-card h3 {
+      font-size: 1.15rem;
+      margin-bottom: 0.15rem;
+    }
+    .producto-card__sub {
+      font-size: 0.8rem;
+      color: var(--naranja);
+      font-weight: 500;
+      margin-bottom: var(--space-sm);
+    }
+    .producto-card__desc {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      line-height: 1.5;
+      flex: 1;
       margin-bottom: var(--space-md);
     }
-    .order-card h3 { font-size: 1.2rem; margin-bottom: var(--space-md); }
-
-    .form-group { margin-bottom: var(--space-md); }
-    .form-group label {
-      display: block;
-      font-size: 0.85rem;
-      font-weight: 600;
-      color: var(--text-secondary);
-      margin-bottom: 0.3rem;
-    }
-    .form-group input,
-    .form-group select,
-    .form-group textarea {
-      width: 100%;
-      padding: 0.75rem 1rem;
-      border: 1px solid rgba(45,41,38,0.12);
-      border-radius: var(--radius-sm);
-      font-family: var(--font-sans);
-      font-size: 0.9rem;
-      background: var(--blanco);
-      transition: border-color var(--duration-fast) var(--ease-out);
-    }
-    .form-group input:focus,
-    .form-group select:focus,
-    .form-group textarea:focus {
-      outline: none;
-      border-color: var(--cobre);
-      box-shadow: 0 0 0 3px rgba(139,105,20,0.1);
-    }
-    .form-group textarea { resize: vertical; min-height: 80px; }
-    .form-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: var(--space-md);
-    }
-    @media (max-width: 480px) { .form-row { grid-template-columns: 1fr; } }
-
-    .payment-options {
-      display: grid;
-      gap: var(--space-sm);
-    }
-    .payment-option {
+    .producto-card__footer {
       display: flex;
       align-items: center;
-      gap: 0.75rem;
-      padding: 0.75rem 1rem;
-      border: 2px solid var(--crema);
-      border-radius: var(--radius-md);
-      cursor: pointer;
-      transition: all var(--duration-fast) var(--ease-out);
+      justify-content: space-between;
+      gap: var(--space-sm);
+      padding-top: var(--space-md);
+      border-top: 1px solid rgba(45,41,38,0.04);
     }
-    .payment-option:hover,
-    .payment-option--selected {
-      border-color: var(--cobre);
-      background: rgba(139,105,20,0.04);
+    .producto-card__precio {
+      font-family: var(--font-serif);
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--naranja);
     }
-    .payment-option input[type="radio"] { accent-color: var(--cobre); margin: 0; }
-    .payment-option__info { font-size: 0.85rem; }
-    .payment-option__info strong { display: block; font-size: 0.9rem; }
+    .btn--add {
+      padding: 0.6rem 1.25rem;
+      font-size: 0.85rem;
+    }
+    .btn--add.agregado {
+      background: var(--verde);
+    }
+    .btn--add.agregado:hover {
+      background: var(--verde);
+      transform: none;
+    }
 
-    .store-card--in-cart {
-      border-color: var(--cobre) !important;
-      background: rgba(139,105,20,0.03);
+    .producto-card.sin-stock {
+      opacity: 0.6;
+    }
+    .sin-stock-badge {
+      display: inline-block;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: #B00020;
+      background: rgba(176,0,32,0.06);
+      padding: 0.25rem 0.75rem;
+      border-radius: var(--radius-full);
     }
 
-    .cart-badge {
+    .cart-count {
       position: absolute;
       top: -4px; right: -4px;
       background: var(--wa);
       color: white;
-      width: 18px; height: 18px;
+      width: 20px; height: 20px;
       border-radius: 50%;
       font-size: 0.65rem;
       font-weight: 700;
@@ -168,40 +110,290 @@
       align-items: center;
       justify-content: center;
     }
-
-    .order-summary-sticky {
-      position: sticky;
-      top: calc(var(--header-height) + var(--space-lg));
-    }
-    @media (max-width: 900px) {
-      .order-summary-sticky { position: static; }
+    .header__nav a[href*="pedidos"] {
+      position: relative;
     }
 
-    .step-actions {
+    .cart-overlay {
+      position: fixed; inset: 0; z-index: 2000;
+      background: rgba(45,41,38,0.5);
+      opacity: 0; visibility: hidden;
+      transition: opacity var(--duration-base) var(--ease-out), visibility var(--duration-base) var(--ease-out);
+      backdrop-filter: blur(2px);
+    }
+    .cart-overlay.open { opacity: 1; visibility: visible; }
+
+    .cart-drawer {
+      position: fixed; top: 0; right: 0; bottom: 0;
+      width: 100%; max-width: 420px;
+      z-index: 2001;
+      background: var(--blanco);
+      transform: translateX(100%);
+      transition: transform 0.4s cubic-bezier(0.22,1,0.36,1);
+      display: flex; flex-direction: column;
+      box-shadow: -8px 0 40px rgba(0,0,0,0.08);
+    }
+    .cart-drawer.open { transform: translateX(0); }
+
+    .cart-drawer__header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: var(--space-lg) var(--space-lg) var(--space-md);
+      border-bottom: 1px solid rgba(45,41,38,0.06);
+    }
+    .cart-drawer__header h2 {
+      font-size: 1.2rem;
+    }
+    .cart-drawer__header h2 span {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      font-family: var(--font-sans);
+      font-weight: 400;
+    }
+    .cart-close {
+      width: 36px; height: 36px; border-radius: 50%;
+      border: none; background: var(--crema);
+      font-size: 1.2rem; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--madera);
+      transition: all var(--duration-fast) var(--ease-out);
+    }
+    .cart-close:hover { background: var(--crema); color: var(--naranja); transform: rotate(90deg); }
+
+    .cart-drawer__body {
+      flex: 1; overflow-y: auto;
+      padding: var(--space-md) var(--space-lg);
+    }
+    .cart-vacio {
+      text-align: center;
+      padding: 3rem 0;
+      color: var(--text-muted);
+    }
+    .cart-vacio__icon { font-size: 2.5rem; margin-bottom: var(--space-sm); }
+    .cart-vacio p { font-size: 0.9rem; }
+
+    .cart-item {
+      display: flex; gap: var(--space-md); padding: var(--space-md) 0;
+      border-bottom: 1px solid rgba(45,41,38,0.04);
+      animation: cartIn 0.3s var(--ease-out);
+    }
+    .cart-item:last-child { border-bottom: none; }
+    @keyframes cartIn { from { opacity: 0; transform: translateX(12px); } to { opacity: 1; transform: translateX(0); } }
+
+    .cart-item__icon { font-size: 1.5rem; flex-shrink: 0; }
+    .cart-item__info { flex: 1; min-width: 0; }
+    .cart-item__info h4 { font-size: 0.9rem; margin-bottom: 0.1rem; }
+    .cart-item__precio { font-size: 0.8rem; color: var(--naranja); font-weight: 500; }
+    .cart-item__controles {
+      display: flex; align-items: center; gap: var(--space-sm); margin-top: var(--space-sm);
+    }
+    .cart-item__controles button {
+      width: 28px; height: 28px; border-radius: var(--radius-sm);
+      border: 1px solid rgba(45,41,38,0.08);
+      background: var(--blanco);
+      font-size: 0.9rem; font-weight: 600;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      color: var(--carbon);
+      transition: all var(--duration-fast) var(--ease-out);
+    }
+    .cart-item__controles button:hover {
+      background: var(--crema); border-color: var(--naranja); color: var(--naranja);
+    }
+    .cart-item__controles span {
+      font-weight: 600; min-width: 20px; text-align: center;
+    }
+    .cart-item__total {
+      text-align: right;
+    }
+    .cart-item__total .line-total {
+      font-weight: 700; font-size: 0.9rem;
+    }
+    .cart-item__total .remove-btn {
+      background: none; border: none; color: var(--text-muted);
+      font-size: 0.75rem; cursor: pointer; padding: 4px 0;
+      transition: color var(--duration-fast) var(--ease-out);
+    }
+    .cart-item__total .remove-btn:hover { color: #B00020; }
+
+    .cart-drawer__footer {
+      padding: var(--space-md) var(--space-lg) var(--space-lg);
+      border-top: 1px solid rgba(45,41,38,0.06);
+      background: var(--blanco);
+    }
+    .cart-drawer__total {
+      display: flex; justify-content: space-between;
+      font-size: 1.1rem; font-weight: 700;
+      margin-bottom: var(--space-md);
+    }
+    .cart-drawer__total span:last-child { color: var(--naranja); }
+    .btn--checkout {
+      width: 100%; padding: 1rem;
+      justify-content: center;
+    }
+
+    .modal-overlay {
+      position: fixed; inset: 0; z-index: 3000;
+      background: rgba(45,41,38,0.5);
+      opacity: 0; visibility: hidden;
+      transition: opacity var(--duration-base) var(--ease-out), visibility var(--duration-base) var(--ease-out);
+      backdrop-filter: blur(6px);
+    }
+    .modal-overlay.open { opacity: 1; visibility: visible; }
+
+    .checkout-modal {
+      position: fixed; top: 50%; left: 50%; z-index: 3001;
+      transform: translate(-50%,-50%) scale(0.92);
+      background: var(--blanco);
+      border-radius: var(--radius-lg);
+      padding: var(--space-xl) var(--space-lg) var(--space-lg);
+      width: calc(100% - 28px); max-width: 460px;
+      max-height: 90vh; overflow-y: auto;
+      opacity: 0; visibility: hidden;
+      transition: all 0.35s cubic-bezier(0.22,1,0.36,1);
+      box-shadow: 0 24px 80px rgba(0,0,0,0.18);
+    }
+    .checkout-modal.open { opacity: 1; visibility: visible; transform: translate(-50%,-50%) scale(1); }
+    .checkout-modal .cart-close {
+      position: absolute; top: 16px; right: 16px;
+    }
+    .checkout-modal h2 { font-size: 1.3rem; margin-bottom: 0.25rem; }
+    .checkout-modal .checkout-sub {
+      font-size: 0.85rem; color: var(--text-muted);
+      margin-bottom: var(--space-lg);
+    }
+    .checkout-modal .form-group { margin-bottom: var(--space-md); }
+    .checkout-modal label {
+      display: block; font-size: 0.8rem; font-weight: 600;
+      color: var(--text-secondary); margin-bottom: 0.3rem;
+    }
+    .checkout-modal input,
+    .checkout-modal textarea {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border: 1.5px solid rgba(45,41,38,0.1);
+      border-radius: var(--radius-sm);
+      font-family: var(--font-sans);
+      font-size: 0.9rem;
+      background: var(--crema);
+      transition: all var(--duration-fast) var(--ease-out);
+      outline: none;
+    }
+    .checkout-modal input:focus,
+    .checkout-modal textarea:focus {
+      border-color: var(--naranja);
+      background: var(--blanco);
+      box-shadow: 0 0 0 3px rgba(212, 105, 42, 0.08);
+    }
+    .checkout-modal textarea { resize: vertical; min-height: 60px; }
+    .checkout-modal input.error,
+    .checkout-modal textarea.error {
+      border-color: #B00020;
+      background: rgba(176,0,32,0.03);
+    }
+
+    .resumen-pedido {
+      background: var(--crema);
+      border-radius: var(--radius-md);
+      padding: var(--space-md);
+      margin: var(--space-lg) 0;
+    }
+    .resumen-pedido h3 {
+      font-size: 0.75rem; font-weight: 600; text-transform: uppercase;
+      letter-spacing: 0.08em; color: var(--text-muted);
+      margin-bottom: var(--space-sm);
+    }
+    .resumen-item {
+      display: flex; justify-content: space-between;
+      font-size: 0.85rem; padding: 0.3rem 0;
+    }
+    .resumen-total {
+      display: flex; justify-content: space-between;
+      font-size: 1rem; font-weight: 700;
+      padding-top: var(--space-sm); margin-top: var(--space-sm);
+      border-top: 2px solid var(--madera);
+    }
+    .resumen-total span:last-child { color: var(--naranja); }
+
+    .btn--submit {
+      width: 100%; padding: 1rem;
+      justify-content: center;
+    }
+    .btn--submit:disabled {
+      opacity: 0.5; cursor: not-allowed; transform: none;
+    }
+
+    .confirmation-box {
+      text-align: center;
+      padding: var(--space-2xl) 0;
+    }
+    .confirmation-box .check-icon {
+      width: 72px; height: 72px; border-radius: 50%;
+      background: var(--verde);
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto var(--space-lg);
+      font-size: 2rem;
+      animation: popIn 0.6s cubic-bezier(0.34,1.56,0.64,1);
+    }
+    @keyframes popIn {
+      0% { transform: scale(0); }
+      100% { transform: scale(1); }
+    }
+    .confirmation-box h2 { margin-bottom: var(--space-sm); }
+    .confirmation-box p { color: var(--text-secondary); max-width: 480px; margin: 0 auto; }
+
+    .cart-float {
+      position: fixed;
+      bottom: 24px; right: 24px;
+      z-index: 999;
+      width: 60px; height: 60px;
+      border-radius: 50%;
+      background: var(--naranja);
+      color: var(--blanco);
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
       display: flex;
-      gap: var(--space-sm);
-      justify-content: space-between;
       align-items: center;
-      margin-top: var(--space-lg);
-      flex-wrap: wrap;
+      justify-content: center;
+      box-shadow: 0 4px 20px rgba(212, 105, 42, 0.35);
+      transition: all var(--duration-fast) var(--ease-out);
+    }
+    .cart-float:hover {
+      transform: scale(1.08);
+      background: var(--naranja-light);
+      color: var(--carbon);
+    }
+    .cart-float .cart-count {
+      position: absolute;
+      top: -2px; right: -2px;
+      width: 24px; height: 24px;
+      font-size: 0.7rem;
+      display: none;
+      background: var(--wa);
+      color: white;
+      border-radius: 50%;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      box-shadow: 0 2px 8px rgba(37,211,102,0.4);
+    }
+
+    @media (max-width: 600px) {
+      .productos-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
 <body>
-
-  <!-- ⛔ Age Gate -->
   <div id="age-gate" class="age-gate">
     <div class="age-gate__card">
       <h2>¿Sos mayor de 18 años?</h2>
       <p>Para comprar Vértice Gin necesitás ser mayor de edad. Consumí con responsabilidad.</p>
       <div class="age-gate__actions">
-        <button id="verify-age" class="btn btn--cobre btn--lg">Sí, soy mayor</button>
+        <button id="verify-age" class="btn btn--primary btn--lg">Sí, soy mayor</button>
         <button id="deny-age" class="btn btn--outline btn--lg">No</button>
       </div>
     </div>
   </div>
 
-  <!-- ===== HEADER ===== -->
   <header class="header">
     <div class="header__inner">
       <a href="../" class="header__logo">
@@ -214,21 +406,18 @@
         <a href="producto.html">Producto</a>
         <a href="cocteleria.html">Coctelería</a>
         <a href="donde-comprar.html">Dónde Comprar</a>
-        <a href="pedidos.html" style="position:relative;">
+        <a href="pedidos.html">
           Pedidos
-          <span class="cart-badge">0</span>
+          <span class="cart-count" id="cart-count-header">0</span>
         </a>
       </nav>
       <button class="hamburger" aria-label="Menú">
-        <span></span>
-        <span></span>
-        <span></span>
+        <span></span><span></span><span></span>
       </button>
     </div>
   </header>
   <div class="nav-overlay"></div>
 
-  <!-- ===== PAGE HEADER ===== -->
   <section class="page-header page-header--sm">
     <div class="container page-header__content">
       <div class="breadcrumb">
@@ -236,254 +425,88 @@
         <span>/</span>
         <span>Pedidos</span>
       </div>
-      <p class="subtitle" style="color:var(--cobre-brillo);">Tienda oficial</p>
+      <p class="subtitle" style="color:var(--naranja-light);">Tienda oficial</p>
       <h1>Pedí tu Vértice Gin</h1>
-      <p>Seleccioná tus productos, completá tus datos y te contactamos para coordinar todo.</p>
+      <p>Elegí tus productos, completá tus datos y te contactamos para coordinar la entrega.</p>
     </div>
   </section>
 
-  <!-- ===== ORDER FLOW ===== -->
   <section class="section">
     <div class="container">
-
-      <!-- Steps indicator -->
-      <div class="order-steps">
-        <div class="step-indicator step-indicator--active" data-step="1">
-          <span class="step-indicator__num">1</span>
-          <span>Productos</span>
-        </div>
-        <div class="step-indicator" data-step="2">
-          <span class="step-indicator__num">2</span>
-          <span>Tus datos</span>
-        </div>
-        <div class="step-indicator" data-step="3">
-          <span class="step-indicator__num">3</span>
-          <span>Envío y pago</span>
-        </div>
-        <div class="step-indicator" data-step="4">
-          <span class="step-indicator__num">4</span>
-          <span>Confirmar</span>
-        </div>
-      </div>
-
-      <div class="order-layout">
-
-        <!-- ===== MAIN FORM ===== -->
-        <div id="order-form">
-
-          <!-- STEP 1: Products -->
-          <div id="step-1" class="order-step order-step--active">
-            <div class="order-card">
-              <h3>Elegí tus productos</h3>
-              <p style="color:var(--text-secondary);margin-bottom:var(--space-lg);font-size:0.9rem;">
-                Seleccioná la cantidad de cada producto. El precio final te lo confirmamos por WhatsApp cuando recibamos tu pedido.
-              </p>
-              <div id="products-list"></div>
-            </div>
-            <div class="step-actions">
-              <span style="font-size:0.85rem;color:var(--text-muted);">Paso 1 de 4</span>
-              <button class="btn btn--cobre" data-goto-step="2" id="next-to-step2">Siguiente: tus datos →</button>
-            </div>
-          </div>
-
-          <!-- STEP 2: Customer Data -->
-          <div id="step-2" class="order-step">
-            <div class="order-card">
-              <h3>Tus datos</h3>
-              <p style="color:var(--text-secondary);margin-bottom:var(--space-lg);font-size:0.9rem;">
-                Completá tus datos de contacto para que podamos comunicarnos con vos.
-              </p>
-              <form id="customer-form" novalidate>
-                <div class="form-group">
-                  <label for="order-name">Nombre y apellido *</label>
-                  <input type="text" id="order-name" name="name" required placeholder="Ej: Juan Pérez">
-                </div>
-                <div class="form-row">
-                  <div class="form-group">
-                    <label for="order-phone">Teléfono / WhatsApp *</label>
-                    <input type="tel" id="order-phone" name="phone" required placeholder="Ej: 2355 123456">
-                  </div>
-                  <div class="form-group">
-                    <label for="order-email">Email</label>
-                    <input type="email" id="order-email" name="email" placeholder="ejemplo@correo.com">
-                  </div>
-                </div>
-                <div class="form-row">
-                  <div class="form-group">
-                    <label for="order-city">Localidad *</label>
-                    <input type="text" id="order-city" name="city" required placeholder="Ej: Pasteur">
-                  </div>
-                  <div class="form-group">
-                    <label for="order-province">Provincia *</label>
-                    <select id="order-province" name="province" required>
-                      <option value="">Seleccioná</option>
-                      <option value="Buenos Aires">Buenos Aires</option>
-                      <option value="CABA">CABA</option>
-                      <option value="Catamarca">Catamarca</option>
-                      <option value="Chaco">Chaco</option>
-                      <option value="Chubut">Chubut</option>
-                      <option value="Córdoba">Córdoba</option>
-                      <option value="Corrientes">Corrientes</option>
-                      <option value="Entre Ríos">Entre Ríos</option>
-                      <option value="Formosa">Formosa</option>
-                      <option value="Jujuy">Jujuy</option>
-                      <option value="La Pampa">La Pampa</option>
-                      <option value="La Rioja">La Rioja</option>
-                      <option value="Mendoza">Mendoza</option>
-                      <option value="Misiones">Misiones</option>
-                      <option value="Neuquén">Neuquén</option>
-                      <option value="Río Negro">Río Negro</option>
-                      <option value="Salta">Salta</option>
-                      <option value="San Juan">San Juan</option>
-                      <option value="San Luis">San Luis</option>
-                      <option value="Santa Cruz">Santa Cruz</option>
-                      <option value="Santa Fe">Santa Fe</option>
-                      <option value="Santiago del Estero">Santiago del Estero</option>
-                      <option value="Tierra del Fuego">Tierra del Fuego</option>
-                      <option value="Tucumán">Tucumán</option>
-                    </select>
-                  </div>
-                </div>
-                <div class="form-group">
-                  <label for="order-address">Dirección *</label>
-                  <input type="text" id="order-address" name="address" required placeholder="Calle y número">
-                </div>
-                <div class="form-row">
-                  <div class="form-group">
-                    <label for="order-zip">Código postal</label>
-                    <input type="text" id="order-zip" name="zip" placeholder="Ej: 6077">
-                  </div>
-                </div>
-                <div class="form-group">
-                  <label for="order-notes">Notas o comentarios</label>
-                  <textarea id="order-notes" name="notes" placeholder="Alguna aclaración? Horario preferido de contacto, etc."></textarea>
-                </div>
-              </form>
-            </div>
-            <div class="step-actions">
-              <button class="btn btn--outline" data-prev-step="1">← Productos</button>
-              <button class="btn btn--cobre" id="next-to-step3">Siguiente: envío y pago →</button>
-            </div>
-          </div>
-
-          <!-- STEP 3: Shipping & Payment -->
-          <div id="step-3" class="order-step">
-            <div class="order-card">
-              <h3>Método de envío</h3>
-              <p style="color:var(--text-secondary);margin-bottom:var(--space-lg);font-size:0.9rem;">
-                Elegí cómo querés recibir tu pedido.
-              </p>
-              <div id="shipping-options"></div>
-            </div>
-
-            <div class="order-card" style="margin-top:var(--space-md);">
-              <h3>Método de pago</h3>
-              <p style="color:var(--text-secondary);margin-bottom:var(--space-lg);font-size:0.9rem;">
-                Elegí cómo preferís pagar. Cuando recibamos tu pedido te confirmamos los datos.
-              </p>
-              <div class="payment-options">
-                <label class="payment-option">
-                  <input type="radio" name="payment" value="transferencia" required>
-                  <div class="payment-option__info">
-                    <strong>Transferencia bancaria</strong>
-                    <span style="color:var(--text-muted);">Te enviamos los datos por WhatsApp</span>
-                  </div>
-                </label>
-                <label class="payment-option">
-                  <input type="radio" name="payment" value="mercadopago">
-                  <div class="payment-option__info">
-                    <strong>Mercado Pago</strong>
-                    <span style="color:var(--text-muted);">Link de pago que te enviamos</span>
-                  </div>
-                </label>
-                <label class="payment-option">
-                  <input type="radio" name="payment" value="efectivo">
-                  <div class="payment-option__info">
-                    <strong>Efectivo</strong>
-                    <span style="color:var(--text-muted);">Contra entrega (consultar disponibilidad)</span>
-                  </div>
-                </label>
-              </div>
-            </div>
-
-            <div class="step-actions">
-              <button class="btn btn--outline" data-prev-step="2">← Tus datos</button>
-              <button class="btn btn--cobre" id="next-to-step4">Revisar pedido →</button>
-            </div>
-          </div>
-
-          <!-- STEP 4: Confirmation -->
-          <div id="step-4" class="order-step">
-            <div class="order-card">
-              <h3>Confirmá tu pedido</h3>
-              <p style="color:var(--text-secondary);margin-bottom:var(--space-lg);font-size:0.9rem;">
-                Revisá que todos los datos sean correctos antes de enviar. Te vamos a contactar para confirmar stock y precio final.
-              </p>
-              <div id="final-order-detail"></div>
-
-              <div style="background:var(--crema);border-radius:var(--radius-md);padding:1rem;margin-top:1rem;font-size:0.8rem;color:var(--text-muted);line-height:1.5;">
-                <strong>📋 Importante:</strong> Al enviar este pedido, te vamos a contactar por WhatsApp o email para confirmar el stock disponible, el precio final según el método de envío elegido y coordinar el pago. No realizamos cobros por adelantado sin confirmación.
-              </div>
-            </div>
-
-            <div class="step-actions">
-              <button class="btn btn--outline" data-prev-step="3">← Envío y pago</button>
-              <button class="btn btn--wa btn--lg" id="submit-order">✅ Enviar pedido</button>
-            </div>
-          </div>
-
-        </div>
-
-        <!-- ===== SIDEBAR SUMMARY ===== -->
-        <aside class="order-summary-sticky">
-          <div class="order-card" id="cart-summary">
-            <h3 style="font-size:1rem;">Resumen del pedido</h3>
-
-            <div id="cart-empty" style="text-align:center;padding:2rem 0;color:var(--text-muted);">
-              <div style="font-size:2rem;margin-bottom:0.5rem;">🛒</div>
-              <p style="font-size:0.85rem;">Todavía no agregaste productos</p>
-            </div>
-
-            <div id="cart-items" style="display:none;"></div>
-
-            <div id="cart-total" style="display:none;flex-direction:column;gap:0.5rem;padding-top:0.75rem;border-top:2px solid var(--crema);margin-top:0.5rem;">
-              <div style="display:flex;justify-content:space-between;font-size:0.85rem;color:var(--text-muted);">
-                <span>Productos</span>
-                <span id="order-total-qty">0 unidades</span>
-              </div>
-              <div style="display:flex;justify-content:space-between;font-size:0.8rem;color:var(--text-muted);padding-top:0.25rem;">
-                <span>Precio</span>
-                <span>A confirmar</span>
-              </div>
-              <div style="display:flex;justify-content:space-between;align-items:center;padding-top:0.5rem;margin-top:0.25rem;border-top:1px solid rgba(0,0,0,0.06);">
-                <strong style="font-size:0.85rem;">Total</strong>
-                <span style="font-size:0.85rem;color:var(--text-muted);">A confirmar</span>
-              </div>
-            </div>
-          </div>
-
-          <div style="font-size:0.75rem;color:var(--text-muted);line-height:1.5;padding:0 0.25rem;">
-            <p>🔒 No guardamos tus datos de pago. Te contactamos para coordinar todo de forma segura.</p>
-            <p style="margin-top:0.5rem;">📦 Los precios y métodos de envío varían según zona. Te damos el precio final al confirmar tu pedido.</p>
-          </div>
-        </aside>
-
-      </div>
-
-      <!-- ===== ORDER CONFIRMATION (hidden by default) ===== -->
-      <div id="order-confirmation" style="display:none;"></div>
-
+      <div class="productos-grid" id="productos-grid"></div>
     </div>
   </section>
 
-  <!-- ===== FOOTER ===== -->
+  <div class="cart-overlay" id="cart-overlay"></div>
+  <aside class="cart-drawer" id="cart-drawer">
+    <div class="cart-drawer__header">
+      <h2>Tu Pedido <span id="cart-count-label">(0)</span></h2>
+      <button class="cart-close" id="cart-close">✕</button>
+    </div>
+    <div class="cart-drawer__body" id="cart-body">
+      <div class="cart-vacio" id="cart-vacio">
+        <div class="cart-vacio__icon">🛒</div>
+        <p>Tu carrito está vacío</p>
+        <p style="font-size:0.8rem;color:var(--text-muted);">Agregá productos para empezar</p>
+      </div>
+      <div id="cart-items" style="display:none;"></div>
+    </div>
+    <div class="cart-drawer__footer" id="cart-footer" style="display:none;">
+      <div class="cart-drawer__total">
+        <span>Total</span>
+        <span id="cart-total">$0</span>
+      </div>
+      <button class="btn btn--primary btn--checkout" id="checkout-btn">Confirmar Pedido</button>
+    </div>
+  </aside>
+
+  <div class="modal-overlay" id="checkout-overlay"></div>
+  <div class="checkout-modal" id="checkout-modal">
+    <button class="cart-close" id="checkout-close">✕</button>
+    <h2>Completá tus datos</h2>
+    <p class="checkout-sub">Te contactamos para coordinar la entrega</p>
+    <form id="checkout-form" novalidate>
+      <div class="form-group">
+        <label for="nombre">Nombre completo *</label>
+        <input type="text" id="nombre" name="nombre" placeholder="Ej: Juan Pérez" required>
+      </div>
+      <div class="form-group">
+        <label for="telefono">Teléfono / WhatsApp *</label>
+        <input type="tel" id="telefono" name="telefono" placeholder="Ej: 2355 123456" required>
+      </div>
+      <div class="form-group">
+        <label for="direccion">Dirección de entrega *</label>
+        <textarea id="direccion" name="direccion" placeholder="Calle, número, localidad, provincia" required></textarea>
+      </div>
+      <div class="form-group">
+        <label for="notas">Notas (opcional)</label>
+        <textarea id="notas" name="notas" placeholder="Horario preferido, punto de referencia, etc."></textarea>
+      </div>
+
+      <div class="resumen-pedido" id="resumen-pedido"></div>
+
+      <button type="submit" class="btn btn--primary btn--submit" id="submit-btn">
+        Comprar
+      </button>
+    </form>
+  </div>
+
+  <div class="container" id="confirmation-container" style="display:none;">
+    <div class="confirmation-box">
+      <div class="check-icon">✅</div>
+      <h2>¡Pedido enviado!</h2>
+      <p>Te vamos a contactar por WhatsApp para confirmar stock, precio final y coordinar el pago y envío.</p>
+      <a href="../" class="btn btn--outline" style="margin-top:var(--space-lg);">Volver al inicio</a>
+    </div>
+  </div>
+
   <footer class="footer">
     <div class="container">
       <div class="footer__grid">
         <div class="footer__brand">
           <a href="../" class="header__logo">
             Vértice
-            <span class="header__logo--accent" style="color:var(--cobre-brillo);">Gin de Pueblo</span>
+            <span class="header__logo--accent" style="color:var(--naranja-light);">Gin de Pueblo</span>
           </a>
           <p>Destilado artesanal en Pasteur, Lincoln, Provincia de Buenos Aires. Hecho por cuatro amigos con alambique de cobre y botánicos de la plaza.</p>
           <div class="footer__social">
@@ -531,6 +554,13 @@
     </div>
   </footer>
 
+  <button class="cart-float" id="cart-float" aria-label="Abrir carrito">
+    🛒
+    <span class="cart-count" id="cart-count-float">0</span>
+  </button>
+
+  <script src="../js/productos.js"></script>
+  <script src="../js/carrito.js"></script>
   <script src="../js/main.js"></script>
   <script src="../js/pedidos.js"></script>
 </body>
