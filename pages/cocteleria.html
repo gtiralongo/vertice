@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="es-AR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Recetas con Vértice Gin — Coctelería de Pueblo | Vértice Gin</title>
+  <meta name="description" content="Aprendé a preparar los signature serves de Vértice: Vértice Tonic, Vértice Spritz, El Pasteur y más. Recetas fáciles con gin artesanal de Pasteur.">
+  <meta name="keywords" content="recetas con gin vertice, vertice tonic, gin tonic artesanal, cocteleria gin argentina, trago con gin pasteur, recetario gin">
+  <link rel="canonical" href="https://verticegin.com.ar/pages/cocteleria.html">
+
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Recetas con Vértice Gin — Coctelería de Pueblo">
+  <meta property="og:description" content="Vértice Tonic, Spritz, El Pasteur. Recetas fáciles para disfrutar nuestro gin artesanal.">
+  <meta property="og:url" content="https://verticegin.com.ar/pages/cocteleria.html">
+  <meta property="og:image" content="https://verticegin.com.ar/images/og-cocteleria.jpg">
+  <meta property="og:locale" content="es_AR">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Recetas con Vértice Gin — Coctelería de Pueblo">
+
+  <script type="application/ld+json">
+  [{
+    "@context":"https://schema.org","@type":"Recipe",
+    "name":"Vértice Tonic","description":"El clásico perfecto con quinoto y romero.",
+    "recipeCategory":"Cóctel","recipeCuisine":"Argentina","keywords":"gin tonic, vertice tonic",
+    "recipeIngredient":["60ml Vértice Gin","150ml Tónica premium","Quinoto fresco","Romero","Hielo"]
+  },{
+    "@context":"https://schema.org","@type":"Recipe",
+    "name":"Vértice Spritz","description":"La versión de pueblo del spritz clásico.",
+    "recipeCategory":"Cóctel","recipeCuisine":"Argentina",
+    "recipeIngredient":["50ml Vértice Gin","100ml Agua tónica","Soda","Naranja","Hielo"]
+  }]
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍸</text></svg>">
+</head>
+<body>
+
+  <!-- ⛔ Age Gate -->
+  <div id="age-gate" class="age-gate">
+    <div class="age-gate__card">
+      <h2>¿Sos mayor de 18 años?</h2>
+      <p>Para disfrutar Vértice Gin necesitás ser mayor de edad. Consumí con responsabilidad.</p>
+      <div class="age-gate__actions">
+        <button id="verify-age" class="btn btn--cobre btn--lg">Sí, soy mayor</button>
+        <button id="deny-age" class="btn btn--outline btn--lg">No</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== HEADER ===== -->
+  <header class="header">
+    <div class="header__inner">
+      <a href="../" class="header__logo">
+        Vértice
+        <span class="header__logo--accent">Gin de Pueblo</span>
+      </a>
+      <nav class="header__nav">
+        <a href="../">Inicio</a>
+        <a href="historia.html">Nuestra Historia</a>
+        <a href="producto.html">Producto</a>
+        <a href="cocteleria.html">Coctelería</a>
+        <a href="donde-comprar.html">Dónde Comprar</a>
+        <a href="pedidos.html">Pedidos</a>
+      </nav>
+      <button class="hamburger" aria-label="Menú">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </header>
+  <div class="nav-overlay"></div>
+
+  <!-- ===== PAGE HEADER ===== -->
+  <section class="page-header page-header--sm">
+    <div class="container page-header__content">
+      <div class="breadcrumb">
+        <a href="../">Inicio</a>
+        <span>/</span>
+        <span>Coctelería</span>
+      </div>
+      <p class="subtitle" style="color:var(--cobre-brillo);">Recetas de pueblo</p>
+      <h1>Coctelería &amp; Recetas</h1>
+      <p>Formas de disfrutar Vértice Gin. Del clásico gin tonic a creaciones de autor.</p>
+    </div>
+  </section>
+
+  <!-- ===== RECIPES ===== -->
+  <section class="section">
+    <div class="container">
+      <div class="recipe-filters">
+        <button class="recipe-filter recipe-filter--active" data-filter="all">Todas</button>
+        <button class="recipe-filter" data-filter="clasico">Clásicos</button>
+        <button class="recipe-filter" data-filter="autor">De autor</button>
+        <button class="recipe-filter" data-filter="sin-alcohol">Sin alcohol</button>
+      </div>
+
+      <div class="recipes-grid">
+        <!-- Vértice Tonic -->
+        <div class="recipe-card fade-in" data-category="clasico">
+          <div class="recipe-card__image">
+            <span>🥂</span>
+            <span class="tag">Clásico</span>
+          </div>
+          <div class="recipe-card__body">
+            <h3>Vértice Tonic</h3>
+            <p>El clásico perfecto. El quinoto y el romero potencian las notas cítricas del gin.</p>
+            <div class="recipe-card__details">
+              <span>⏱ 2 min</span>
+              <span>🍸 Fácil</span>
+              <span>🥃 Copa balón</span>
+            </div>
+            <button class="toggle-ingredients btn btn--outline btn--sm">Ver ingredientes</button>
+            <div class="recipe-card__ingredients">
+              <h4>Ingredientes</h4>
+              <ul>
+                <li>60 ml Vértice Gin</li>
+                <li>150 ml Tónica premium (Fever-Tree o similar)</li>
+                <li>1 quinoto fresco cortado por la mitad</li>
+                <li>1 rama de romero fresco</li>
+                <li>Hielo grande (1 cubo o esférico)</li>
+              </ul>
+              <h4 style="margin-top:var(--space-md);">Preparación</h4>
+              <ul>
+                <li>Llenar la copa con hielo</li>
+                <li>Agregar Vértice Gin</li>
+                <li>Exprimir el quinoto sobre la copa y agregarlo</li>
+                <li>Completar con tónica suavemente</li>
+                <li>Decorar con romero</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- Vértice Spritz -->
+        <div class="recipe-card fade-in" data-category="clasico">
+          <div class="recipe-card__image">
+            <span>🍹</span>
+            <span class="tag">Clásico</span>
+          </div>
+          <div class="recipe-card__body">
+            <h3>Vértice Spritz</h3>
+            <p>La versión de pueblo del spritz. Fresco, burbujeante, ideal para la tarde.</p>
+            <div class="recipe-card__details">
+              <span>⏱ 3 min</span>
+              <span>🍸 Fácil</span>
+              <span>🥃 Copa vino</span>
+            </div>
+            <button class="toggle-ingredients btn btn--outline btn--sm">Ver ingredientes</button>
+            <div class="recipe-card__ingredients">
+              <h4>Ingredientes</h4>
+              <ul>
+                <li>50 ml Vértice Gin</li>
+                <li>100 ml Agua tónica</li>
+                <li>50 ml Soda</li>
+                <li>Rodaja de naranja amarga (o naranja común)</li>
+                <li>Hielo</li>
+              </ul>
+              <h4 style="margin-top:var(--space-md);">Preparación</h4>
+              <ul>
+                <li>Llenar copa con hielo</li>
+                <li>Agregar Vértice Gin</li>
+                <li>Agregar tónica y soda</li>
+                <li>Remover suavemente</li>
+                <li>Decorar con rodaja de naranja</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- El Pasteur -->
+        <div class="recipe-card fade-in" data-category="autor">
+          <div class="recipe-card__image">
+            <span>🔥</span>
+            <span class="tag">De autor</span>
+          </div>
+          <div class="recipe-card__body">
+            <h3>El Pasteur</h3>
+            <p>Creación de un bartender amigo. Un trago ahumado con caramelo de naranja amarga.</p>
+            <div class="recipe-card__details">
+              <span>⏱ 5 min</span>
+              <span>🍸 Medio</span>
+              <span>🥃 Vaso bajo</span>
+            </div>
+            <button class="toggle-ingredients btn btn--outline btn--sm">Ver ingredientes</button>
+            <div class="recipe-card__ingredients">
+              <h4>Ingredientes</h4>
+              <ul>
+                <li>50 ml Vértice Gin</li>
+                <li>20 ml jarabe de naranja amarga (casero)</li>
+                <li>10 ml jugo de limón fresco</li>
+                <li>100 ml ginger ale</li>
+                <li>Hielo</li>
+                <li>Piel de naranja flameada (para decorar)</li>
+              </ul>
+              <h4 style="margin-top:var(--space-md);">Preparación</h4>
+              <ul>
+                <li>En un vaso bajo, mezclar gin, jarabe y jugo de limón</li>
+                <li>Agregar hielo abundante</li>
+                <li>Completar con ginger ale</li>
+                <li>Flamear la piel de naranja sobre el trago y decorar</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- Vértice & Tónica Sin -->
+        <div class="recipe-card fade-in" data-category="sin-alcohol">
+          <div class="recipe-card__image">
+            <span>🌿</span>
+            <span class="tag">Sin alcohol</span>
+          </div>
+          <div class="recipe-card__body">
+            <h3>Vértice &amp; Tónica 0.0</h3>
+            <p>Disfrutá el ritual del gin tonic sin alcohol. La misma experiencia, mismo garnish.</p>
+            <div class="recipe-card__details">
+              <span>⏱ 2 min</span>
+              <span>🍸 Fácil</span>
+              <span>🥃 Copa balón</span>
+            </div>
+            <button class="toggle-ingredients btn btn--outline btn--sm">Ver ingredientes</button>
+            <div class="recipe-card__ingredients">
+              <h4>Ingredientes</h4>
+              <ul>
+                <li>60 ml Tónica premium (sin alcohol)</li>
+                <li>Hielo grande</li>
+                <li>1 quinoto fresco o rodaja de naranja</li>
+                <li>Romero fresco</li>
+              </ul>
+              <h4 style="margin-top:var(--space-md);">Preparación</h4>
+              <ul>
+                <li>Llenar copa con hielo</li>
+                <li>Completar con tónica</li>
+                <li>Exprimir quinoto y agregarlo</li>
+                <li>Decorar con romero</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== TIPS ===== -->
+  <section class="section section--cream">
+    <div class="container">
+      <div class="story-grid fade-in">
+        <div class="story-grid__media">
+          <div class="story-media__placeholder">
+            <span>🍊</span>
+            <p>Video tutorial: Cómo cortar y flamear un quinoto</p>
+          </div>
+        </div>
+        <div class="story-grid__content">
+          <p class="subtitle">Tips de garnish</p>
+          <h2>El secreto está en el toque final</h2>
+          <p>El quinoto de Pasteur no es solo un ingrediente: es la firma de Vértice. Cortalo por la mitad, exprimilo sobre la copa (que la cáscara suelte sus aceites esenciales) y tiralo entero al trago. El romero, fresco, va golpeado suavemente para activar sus aromas.</p>
+          <p><strong>Regla de oro:</strong> un garnish cuidado transforma un buen gin tonic en un gin tonic inolvidable.</p>
+          <a href="#" class="btn btn--cobre" data-wa data-wa-message="Hola! Descargué el recetario de Vértice. ¿Me recomiendan alguna tónica para el Vértice Tonic?" data-wa-location="tips-cocteleria">
+            💬 Consultá al bartender
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== DOWNLOAD RECETARIO ===== -->
+  <section class="section section--dark">
+    <div class="container">
+      <div class="cta-section fade-in">
+        <p class="subtitle" style="color:var(--cobre-brillo);">Llevá las recetas a todos lados</p>
+        <h2>Descargá el Recetario de Pueblo</h2>
+        <p style="color:var(--arena);">Un PDF con todas las recetas, tips de garnish, maridaje y una guía de botánicos de Vértice.</p>
+        <div style="display:flex;gap:var(--space-sm);justify-content:center;flex-wrap:wrap;">
+          <a href="#" class="btn btn--cobre btn--lg" onclick="alert('📥 Próximamente: descarga del recetario. Dejanos tu mail en el newsletter y te avisamos.');">📥 Descargar PDF</a>
+          <a href="pedidos.html" class="btn btn--outline-light btn--lg">🛒 Pedí tu Vértice</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer__grid">
+        <div class="footer__brand">
+          <a href="../" class="header__logo">
+            Vértice
+            <span class="header__logo--accent" style="color:var(--cobre-brillo);">Gin de Pueblo</span>
+          </a>
+          <p>Destilado artesanal en Pasteur, Lincoln, Provincia de Buenos Aires. Hecho por cuatro amigos con alambique de cobre y botánicos de la plaza.</p>
+          <div class="footer__social">
+            <a href="https://instagram.com/verticegin" target="_blank" rel="noopener" aria-label="Instagram">📷</a>
+            <a href="https://wa.me/549XXXXXXXXXX" target="_blank" rel="noopener" aria-label="WhatsApp">💬</a>
+            <a href="https://threads.com/@verticegin" target="_blank" rel="noopener" aria-label="Threads">◎</a>
+          </div>
+        </div>
+        <div class="footer__col">
+          <h4>Navegación</h4>
+          <ul>
+            <li><a href="../">Inicio</a></li>
+            <li><a href="historia.html">Nuestra Historia</a></li>
+            <li><a href="producto.html">Producto</a></li>
+            <li><a href="cocteleria.html">Coctelería</a></li>
+            <li><a href="donde-comprar.html">Dónde Comprar</a></li>
+            <li><a href="pedidos.html">Pedidos</a></li>
+          </ul>
+        </div>
+        <div class="footer__col">
+          <h4>Contacto</h4>
+          <ul>
+            <li><a href="https://wa.me/549XXXXXXXXXX" target="_blank">WhatsApp</a></li>
+            <li><a href="https://instagram.com/verticegin" target="_blank">Instagram</a></li>
+            <li><a href="mailto:hola@verticegin.com.ar">hola@verticegin.com.ar</a></li>
+          </ul>
+        </div>
+        <div class="footer__col">
+          <h4>Legal</h4>
+          <ul>
+            <li><a href="#">Términos y condiciones</a></li>
+            <li><a href="#">Política de privacidad</a></li>
+            <li><a href="#">Consumo responsable</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer__bottom">
+        <small>&copy; 2024 Vértice Gin de Pueblo. Todos los derechos reservados. Hecho en Pasteur 🧉</small>
+        <div class="footer__legal">
+          <a href="#">Términos</a>
+          <a href="#">Privacidad</a>
+          <span style="opacity:0.4;">+18</span>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ===== WHATSAPP FLOATING ===== -->
+  <div class="wa-float">
+    <div class="wa-float__tooltip">💬 Consultanos</div>
+    <a href="https://wa.me/549XXXXXXXXXX?text=Hola%20V%C3%A9rtice%21%20Tengo%20una%20consulta."
+       target="_blank"
+       class="wa-float__btn"
+       aria-label="WhatsApp"
+       onclick="gtag&&gtag('event','click_whatsapp',{button_location:'float'})">
+      💬
+    </a>
+  </div>
+
+  <script src="../js/main.js"></script>
+  <script src="../js/cocteleria.js"></script>
+</body>
+</html>

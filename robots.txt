@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Allow: /pages/
+
+Sitemap: https://verticegin.com.ar/sitemap.xml

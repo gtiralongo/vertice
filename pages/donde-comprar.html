@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="es-AR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dónde Comprar Vértice Gin — Puntos de Venta y Envíos a Todo el País</title>
+  <meta name="description" content="Encontrá Vértice Gin en Pasteur, Lincoln, Junín, Salto, CABA y online. Mapa interactivo, puntos de venta y envíos a todo el país por WhatsApp.">
+  <meta name="keywords" content="donde comprar vertice gin, puntos de venta gin pasteur, comprar gin artesanal argentina, gin lincoln, gin caba, envio gin argentina">
+  <link rel="canonical" href="https://verticegin.com.ar/pages/donde-comprar.html">
+
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Dónde Comprar Vértice Gin — Envíos a Todo el País">
+  <meta property="og:description" content="Mapa con todos los puntos de venta. Pedí directo por WhatsApp con envío a todo el país.">
+  <meta property="og:url" content="https://verticegin.com.ar/pages/donde-comprar.html">
+  <meta property="og:image" content="https://verticegin.com.ar/images/og-dondecomprar.jpg">
+  <meta property="og:locale" content="es_AR">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Dónde Comprar Vértice Gin — Envíos a Todo el País">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "ItemAvailability",
+    "name": "Puntos de venta Vértice Gin",
+    "description": "Ubicaciones donde comprar Vértice Gin de Pueblo",
+    "hasOfferCatalog": {
+      "@type": "OfferCatalog",
+      "name": "Puntos de venta",
+      "itemListElement": [
+        {"@type":"Offer","itemOffered":{"@type":"Product","name":"Vértice Gin Clásico"}},
+        {"@type":"Place","name":"Pasteur"},
+        {"@type":"Place","name":"Lincoln"},
+        {"@type":"Place","name":"Junín"},
+        {"@type":"Place","name":"Salto"},
+        {"@type":"Place","name":"CABA"}
+      ]
+    }
+  }
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍸</text></svg>">
+  <style>
+    #mapa-puntos-venta { width: 100%; height: 450px; border-radius: var(--radius-md); overflow: hidden; border: 1px solid rgba(45,41,38,0.06); }
+    #mapa-puntos-venta .leaflet-popup-content-wrapper { border-radius: 12px; font-family: var(--font-sans); }
+    #mapa-puntos-venta .leaflet-popup-content { margin: 14px 18px; }
+    #mapa-puntos-venta .leaflet-popup-tip { background: var(--blanco); }
+  </style>
+</head>
+<body>
+
+  <!-- ⛔ Age Gate -->
+  <div id="age-gate" class="age-gate">
+    <div class="age-gate__card">
+      <h2>¿Sos mayor de 18 años?</h2>
+      <p>Para disfrutar Vértice Gin necesitás ser mayor de edad. Consumí con responsabilidad.</p>
+      <div class="age-gate__actions">
+        <button id="verify-age" class="btn btn--cobre btn--lg">Sí, soy mayor</button>
+        <button id="deny-age" class="btn btn--outline btn--lg">No</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== HEADER ===== -->
+  <header class="header">
+    <div class="header__inner">
+      <a href="../" class="header__logo">
+        Vértice
+        <span class="header__logo--accent">Gin de Pueblo</span>
+      </a>
+      <nav class="header__nav">
+        <a href="../">Inicio</a>
+        <a href="historia.html">Nuestra Historia</a>
+        <a href="producto.html">Producto</a>
+        <a href="cocteleria.html">Coctelería</a>
+        <a href="donde-comprar.html">Dónde Comprar</a>
+        <a href="pedidos.html">Pedidos</a>
+      </nav>
+      <button class="hamburger" aria-label="Menú">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </header>
+  <div class="nav-overlay"></div>
+
+  <!-- ===== PAGE HEADER ===== -->
+  <section class="page-header page-header--sm">
+    <div class="container page-header__content">
+      <div class="breadcrumb">
+        <a href="../">Inicio</a>
+        <span>/</span>
+        <span>Dónde Comprar</span>
+      </div>
+      <p class="subtitle" style="color:var(--cobre-brillo);">Conseguí tu botella</p>
+      <h1>Dónde Comprar Vértice Gin</h1>
+      <p>Encontrá nuestro gin en puntos de venta físicos o pedilo directo por WhatsApp con envío a todo el país.</p>
+    </div>
+  </section>
+
+  <!-- ===== MAPA + CTA DIRECTO ===== -->
+  <section class="section">
+    <div class="container">
+      <div class="section__header fade-in" style="text-align:left;">
+        <p class="subtitle">Pedí directo</p>
+        <h2>Envíos a todo el país</h2>
+        <p style="max-width:500px;">Hacé tu pedido online y te contactamos para confirmar stock, precio final y coordinar el envío.</p>
+        <a href="pedidos.html" class="btn btn--cobre btn--lg">🛒 Hacé tu pedido</a>
+      </div>
+
+      <div class="fade-in" style="margin-top:var(--space-xl);">
+        <p class="subtitle">Puntos de venta físicos</p>
+        <h3 style="margin-bottom:var(--space-md);">Encontranos en estos lugares</h3>
+        <div id="mapa-puntos-venta"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== STORES LIST ===== -->
+  <section class="section section--cream">
+    <div class="container">
+      <div class="section__header fade-in">
+        <p class="subtitle">Todos los puntos</p>
+        <h2>¿Dónde comprar Vértice?</h2>
+        <p>Tiendas, bares y distribuidores que ya tienen nuestro gin. Si tenés un local y querés sumarte, escribinos.</p>
+      </div>
+
+      <div class="stores-grid">
+        <div class="store-card fade-in">
+          <div class="store-card__icon">📍</div>
+          <div class="store-card__info">
+            <h4>Pasteur — Destilería Vértice</h4>
+            <p>Pasteur, Lincoln, Bs. As.</p>
+            <a href="https://wa.me/549XXXXXXXXXX?text=Hola%2C%20quiero%20comprar%20V%C3%A9rtice%20en%20Pasteur" target="_blank" class="store-cta">💬 Pedí directo</a>
+          </div>
+        </div>
+        <div class="store-card fade-in">
+          <div class="store-card__icon">📍</div>
+          <div class="store-card__info">
+            <h4>Lincoln — Almacén de Bebidas</h4>
+            <p>Lincoln Centro, Bs. As.</p>
+            <a href="https://wa.me/549XXXXXXXXXX?text=Hola%2C%20quiero%20saber%20si%20tienen%20V%C3%A9rtice%20Gin%20en%20Lincoln" target="_blank" class="store-cta">💬 Consultar stock</a>
+          </div>
+        </div>
+        <div class="store-card fade-in">
+          <div class="store-card__icon">📍</div>
+          <div class="store-card__info">
+            <h4>Junín — Licorería El Encuentro</h4>
+            <p>Junín, Bs. As.</p>
+            <a href="https://wa.me/549XXXXXXXXXX?text=Hola%2C%20quiero%20saber%20si%20tienen%20V%C3%A9rtice%20Gin%20en%20Jun%C3%ADn" target="_blank" class="store-cta">💬 Consultar stock</a>
+          </div>
+        </div>
+        <div class="store-card fade-in">
+          <div class="store-card__icon">📍</div>
+          <div class="store-card__info">
+            <h4>Salto — Bodegón Salteño</h4>
+            <p>Salto, Bs. As.</p>
+            <a href="https://wa.me/549XXXXXXXXXX?text=Hola%2C%20quiero%20saber%20si%20tienen%20V%C3%A9rtice%20Gin%20en%20Salto" target="_blank" class="store-cta">💬 Consultar stock</a>
+          </div>
+        </div>
+        <div class="store-card fade-in">
+          <div class="store-card__icon">📍</div>
+          <div class="store-card__info">
+            <h4>CABA — Barrio Norte</h4>
+            <p>CABA</p>
+            <a href="https://wa.me/549XXXXXXXXXX?text=Hola%2C%20quiero%20saber%20d%C3%B3nde%20comprar%20V%C3%A9rtice%20Gin%20en%20CABA" target="_blank" class="store-cta">💬 Consultar stock</a>
+          </div>
+        </div>
+        <div class="store-card fade-in">
+          <div class="store-card__icon">📍</div>
+          <div class="store-card__info">
+            <h4>CABA — Palermo</h4>
+            <p>Palermo, CABA</p>
+            <a href="https://wa.me/549XXXXXXXXXX?text=Hola%2C%20quiero%20saber%20d%C3%B3nde%20comprar%20V%C3%A9rtice%20Gin%20en%20Palermo" target="_blank" class="store-cta">💬 Consultar stock</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== CLUB VÉRTICE ===== -->
+  <section class="section">
+    <div class="container">
+      <div class="story-grid fade-in">
+        <div class="story-grid__content">
+          <p class="subtitle">Club Vértice</p>
+          <h2>Suscribite y recibí tu gin todos los meses</h2>
+          <p>Elegí la frecuencia (mensual, bimestral o trimestral) y recibí tu botella en la puerta de tu casa con una edición especial y contenido exclusivo.</p>
+          <ul style="margin-bottom:var(--space-md);color:var(--text-secondary);line-height:2;">
+            <li>✓ Botella numerada edición suscriptor</li>
+            <li>✓ Recetario exclusivo</li>
+            <li>✓ 10% de descuento permanente</li>
+            <li>✓ Cancelación sin cargo</li>
+          </ul>
+          <a href="#" class="btn btn--cobre" data-wa data-wa-message="Hola! Quiero info sobre el Club Vértice de suscripción." data-wa-location="club-vertice">
+            💬 Quiero suscribirme
+          </a>
+        </div>
+        <div class="story-grid__media">
+          <div class="story-media__placeholder">
+            <span>🎁</span>
+            <p>Mockup: Caja Club Vértice — botella + recetario + obsequio</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== B2B ===== -->
+  <section class="section section--dark">
+    <div class="container">
+      <div class="cta-section fade-in">
+        <p class="subtitle" style="color:var(--cobre-brillo);">¿Tenés un bar o comercio?</p>
+        <h2>Vendé Vértice en tu local</h2>
+        <p style="color:var(--arena);">Sumá un gin artesanal con historia a tu barra o estantería. Distribuimos en Lincoln, Junín, Salto, CABA y toda la provincia de Buenos Aires.</p>
+        <div style="display:flex;gap:var(--space-sm);justify-content:center;flex-wrap:wrap;">
+          <a href="pedidos.html" class="btn btn--cobre btn--lg">🛒 Hacé tu pedido</a>
+          <a href="#" class="btn btn--outline-light btn--lg" data-wa data-wa-message="Hola! Tengo un bar/comercio y quiero vender Vértice Gin." data-wa-location="b2b">💬 Quiero ser distribuidor</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer__grid">
+        <div class="footer__brand">
+          <a href="../" class="header__logo">
+            Vértice
+            <span class="header__logo--accent" style="color:var(--cobre-brillo);">Gin de Pueblo</span>
+          </a>
+          <p>Destilado artesanal en Pasteur, Lincoln, Provincia de Buenos Aires. Hecho por cuatro amigos con alambique de cobre y botánicos de la plaza.</p>
+          <div class="footer__social">
+            <a href="https://instagram.com/verticegin" target="_blank" rel="noopener" aria-label="Instagram">📷</a>
+            <a href="https://wa.me/549XXXXXXXXXX" target="_blank" rel="noopener" aria-label="WhatsApp">💬</a>
+            <a href="https://threads.com/@verticegin" target="_blank" rel="noopener" aria-label="Threads">◎</a>
+          </div>
+        </div>
+        <div class="footer__col">
+          <h4>Navegación</h4>
+          <ul>
+            <li><a href="../">Inicio</a></li>
+            <li><a href="historia.html">Nuestra Historia</a></li>
+            <li><a href="producto.html">Producto</a></li>
+            <li><a href="cocteleria.html">Coctelería</a></li>
+            <li><a href="donde-comprar.html">Dónde Comprar</a></li>
+            <li><a href="pedidos.html">Pedidos</a></li>
+          </ul>
+        </div>
+        <div class="footer__col">
+          <h4>Contacto</h4>
+          <ul>
+            <li><a href="https://wa.me/549XXXXXXXXXX" target="_blank">WhatsApp</a></li>
+            <li><a href="https://instagram.com/verticegin" target="_blank">Instagram</a></li>
+            <li><a href="mailto:hola@verticegin.com.ar">hola@verticegin.com.ar</a></li>
+          </ul>
+        </div>
+        <div class="footer__col">
+          <h4>Legal</h4>
+          <ul>
+            <li><a href="#">Términos y condiciones</a></li>
+            <li><a href="#">Política de privacidad</a></li>
+            <li><a href="#">Consumo responsable</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer__bottom">
+        <small>&copy; 2024 Vértice Gin de Pueblo. Todos los derechos reservados. Hecho en Pasteur 🧉</small>
+        <div class="footer__legal">
+          <a href="#">Términos</a>
+          <a href="#">Privacidad</a>
+          <span style="opacity:0.4;">+18</span>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ===== WHATSAPP FLOATING ===== -->
+  <div class="wa-float">
+    <div class="wa-float__tooltip">💬 Consultanos</div>
+    <a href="https://wa.me/549XXXXXXXXXX?text=Hola%20V%C3%A9rtice%21%20Tengo%20una%20consulta."
+       target="_blank"
+       class="wa-float__btn"
+       aria-label="WhatsApp"
+       onclick="gtag&&gtag('event','click_whatsapp',{button_location:'float'})">
+      💬
+    </a>
+  </div>
+
+  <script src="../js/main.js"></script>
+  <script src="../js/mapa.js"></script>
+</body>
+</html>
