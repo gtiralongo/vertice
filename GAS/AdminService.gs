@@ -4,10 +4,18 @@ function isAdmin() {
   try {
     ensureSheets();
     var userEmail = Session.getActiveUser().getEmail();
+    if (!userEmail) return false;
     var adminEmailsRaw = getConfig('admin_emails');
-    if (!adminEmailsRaw) return false;
-    var adminEmails = JSON.parse(adminEmailsRaw);
-    if (!Array.isArray(adminEmails)) return false;
+    var adminEmails = adminEmailsRaw ? JSON.parse(adminEmailsRaw) : [];
+    if (!Array.isArray(adminEmails)) adminEmails = [];
+
+    // Si la lista está vacía, el primer usuario en acceder se convierte en admin
+    if (adminEmails.length === 0) {
+      adminEmails.push(userEmail);
+      setConfig('admin_emails', JSON.stringify(adminEmails));
+      return true;
+    }
+
     return adminEmails.indexOf(userEmail) !== -1;
   } catch (e) {
     return false;
@@ -46,6 +54,19 @@ function removeAdminEmail(email) {
 
 function getCurrentUserEmail() {
   return Session.getActiveUser().getEmail();
+}
+
+// Ejecutar manualmente desde el editor de GAS para agregar el primer admin
+function setupFirstAdmin(email) {
+  ensureSheets();
+  var raw = getConfig('admin_emails');
+  var list = raw ? JSON.parse(raw) : [];
+  if (!Array.isArray(list)) list = [];
+  if (list.indexOf(email) === -1) {
+    list.push(email);
+    setConfig('admin_emails', JSON.stringify(list));
+  }
+  return list;
 }
 
 
