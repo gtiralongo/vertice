@@ -145,8 +145,16 @@
     .admin-emails .email-tag button:hover { color: #B00020; }
 
     @media (max-width: 640px) {
-      .tab-content { padding: 16px; }
-      th, td { padding: 8px 10px; font-size: 12px; }
+      .tab-content { padding: 14px; }
+      th, td { padding: 8px 8px; font-size: 11px; }
+      .admin-header { padding: 12px 14px; }
+      .admin-header h1 { font-size: 17px; }
+      .tab-btn { padding: 12px 14px; font-size: 12px; }
+    }
+    @media (max-width: 400px) {
+      .tab-content { padding: 10px; }
+      th, td { padding: 6px 6px; font-size: 10px; }
+      .modal-box { padding: 20px 16px; }
     }
   </style>
 </head>
@@ -315,19 +323,24 @@
           var html = '';
           products.forEach(function(p) {
             var stockLabel = p.stock === -1 ? '∞' : p.stock;
+            var activo = p.activo || 'No';
             html += '<tr>' +
               '<td>' + p.id + '</td>' +
               '<td><strong>' + esc(p.nombre) + '</strong></td>' +
-              '<td>$' + Number(p.precio).toLocaleString('es-AR') + '</td>' +
+              '<td>$' + Number(p.precio || 0).toLocaleString('es-AR') + '</td>' +
               '<td>' + esc(p.categoria) + '</td>' +
               '<td>' + stockLabel + '</td>' +
-              '<td><span style="color:' + (p.activo === 'Si' ? 'var(--verde)' : '#B00020') + ';font-weight:600">' + p.activo + '</span></td>' +
+              '<td><span style="color:' + (activo === 'Si' ? 'var(--verde)' : '#B00020') + ';font-weight:600">' + activo + '</span></td>' +
               '<td>' +
               '<button class="btn btn-sm btn-outline" onclick="editProduct(' + p.id + ')">Editar</button> ' +
-              '<button class="btn btn-sm ' + (p.activo === 'Si' ? 'btn-danger' : 'btn-success') + '" onclick="toggleProduct(' + p.id + ')">' + (p.activo === 'Si' ? 'Desact.' : 'Activar') + '</button>' +
+              '<button class="btn btn-sm ' + (activo === 'Si' ? 'btn-danger' : 'btn-success') + '" onclick="toggleProduct(' + p.id + ')">' + (activo === 'Si' ? 'Desact.' : 'Activar') + '</button>' +
               '</td></tr>';
           });
           tbody.innerHTML = html;
+        })
+        .withFailureHandler(function(err) {
+          $('productTableBody').innerHTML = '<tr><td colspan="7"><div class="empty-state">Error al cargar productos</div></td></tr>';
+          showToast('Error al cargar productos', 'error');
         })
         .getAllProducts();
     }
@@ -336,16 +349,19 @@
       google.script.run
         .withSuccessHandler(function(products) {
           var p = products.find(function(x) { return x.id === id; });
-          if (!p) return;
+          if (!p) { showToast('Producto no encontrado', 'error'); return; }
           $('productModalTitle').textContent = 'Editar Producto';
           $('editProductId').value = p.id;
-          $('prod-nombre').value = p.nombre;
-          $('prod-descripcion').value = p.descripcion;
-          $('prod-precio').value = p.precio;
-          $('prod-categoria').value = p.categoria;
-          $('prod-stock').value = p.stock;
-          $('prod-imagen').value = p.imagenURL;
+          $('prod-nombre').value = p.nombre || '';
+          $('prod-descripcion').value = p.descripcion || '';
+          $('prod-precio').value = p.precio || '';
+          $('prod-categoria').value = p.categoria || '';
+          $('prod-stock').value = p.stock !== undefined ? p.stock : -1;
+          $('prod-imagen').value = p.imagenURL || '';
           $('productModal').classList.add('open');
+        })
+        .withFailureHandler(function(err) {
+          showToast('Error al cargar producto', 'error');
         })
         .getAllProducts();
     };
@@ -411,9 +427,11 @@
           var html = '';
           orders.forEach(function(o) {
             var items;
-            try { items = JSON.parse(o.productos); } catch(e) { items = []; }
-            var itemsStr = items.map(function(i) { return i.cantidad + '× ' + i.nombre; }).join(', ');
+            try { items = JSON.parse(o.productos || '[]'); } catch(e) { items = []; }
+            var itemsStr = items.map(function(i) { return (i.cantidad || 1) + '× ' + (i.nombre || 'Producto'); }).join(', ');
             if (itemsStr.length > 60) itemsStr = itemsStr.substring(0, 57) + '...';
+            var estado = o.estado || 'Pendiente';
+            var estadoClass = estado.replace(/\s/g, '');
 
             html += '<tr>' +
               '<td><strong>' + esc(o.id) + '</strong></td>' +
@@ -421,11 +439,11 @@
               '<td>' + esc(o.nombre) + '<br><span style="font-size:11px;color:var(--text-muted)">' + esc(o.email) + '</span></td>' +
               '<td>' + esc(o.telefono) + '</td>' +
               '<td style="max-width:200px;font-size:11px">' + esc(itemsStr) + '</td>' +
-              '<td><strong>$' + Number(o.total).toLocaleString('es-AR') + '</strong></td>' +
-              '<td><span class="status-badge status-' + o.estado.replace(/\s/g, '') + '">' + esc(o.estado) + '</span></td>' +
+              '<td><strong>$' + Number(o.total || 0).toLocaleString('es-AR') + '</strong></td>' +
+              '<td><span class="status-badge status-' + estadoClass + '">' + esc(estado) + '</span></td>' +
               '<td>' +
-              '<button class="btn btn-sm btn-outline" onclick="viewOrder(\'' + o.id + '\')">Ver</button> ' +
-              '<select onchange="updateOrderStatus(\'' + o.id + '\', this.value)" style="padding:4px 6px;border-radius:6px;border:1px solid rgba(0,0,0,0.08);font-size:11px;font-family:var(--font-body)">' +
+              '<button class="btn btn-sm btn-outline" onclick="viewOrder(\'' + String(o.id).replace(/'/g, '') + '\')">Ver</button> ' +
+              '<select onchange="updateOrderStatus(\'' + String(o.id).replace(/'/g, '') + '\', this.value)" style="padding:4px 6px;border-radius:6px;border:1px solid rgba(0,0,0,0.08);font-size:11px;font-family:var(--font-body)">' +
               '<option value="">Cambiar</option>' +
               '<option value="Pendiente">Pendiente</option>' +
               '<option value="Confirmado">Confirmado</option>' +
@@ -438,6 +456,10 @@
           });
           tbody.innerHTML = html;
         })
+        .withFailureHandler(function(err) {
+          $('orderTableBody').innerHTML = '<tr><td colspan="8"><div class="empty-state">Error al cargar pedidos: ' + err.message + '</div></td></tr>';
+          showToast('Error al cargar pedidos', 'error');
+        })
         .getOrders();
     }
 
@@ -447,18 +469,22 @@
           var o = orders.find(function(x) { return x.id === orderId; });
           if (!o) return;
           var items;
-          try { items = JSON.parse(o.productos); } catch(e) { items = []; }
+          try { items = JSON.parse(o.productos || '[]'); } catch(e) { items = []; }
           var itemsHtml = items.map(function(i) {
+            var qty = i.cantidad || 1;
+            var price = i.precio || 0;
             return '<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid rgba(0,0,0,0.04)">' +
-              '<span>' + esc(i.nombre) + ' × ' + i.cantidad + '</span>' +
-              '<span style="font-weight:600">$' + Number(i.precio * i.cantidad).toLocaleString('es-AR') + '</span></div>';
+              '<span>' + esc(i.nombre || 'Producto') + ' × ' + qty + '</span>' +
+              '<span style="font-weight:600">$' + Number(price * qty).toLocaleString('es-AR') + '</span></div>';
           }).join('');
+          var estado = o.estado || 'Pendiente';
+          var estadoClass = estado.replace(/\s/g, '');
 
           $('orderDetailContent').innerHTML =
             '<div style="margin-bottom:16px">' +
             '<p><strong>Pedido:</strong> ' + esc(o.id) + '</p>' +
             '<p><strong>Fecha:</strong> ' + esc(o.fecha) + '</p>' +
-            '<p><strong>Estado:</strong> <span class="status-badge status-' + o.estado.replace(/\s/g, '') + '">' + esc(o.estado) + '</span></p>' +
+            '<p><strong>Estado:</strong> <span class="status-badge status-' + estadoClass + '">' + esc(estado) + '</span></p>' +
             '</div>' +
             '<div style="margin-bottom:16px">' +
             '<p><strong>Cliente:</strong> ' + esc(o.nombre) + '</p>' +
@@ -471,9 +497,12 @@
             '<p style="font-weight:600;margin-bottom:6px;font-size:13px;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-muted)">Productos</p>' +
             itemsHtml +
             '<div style="display:flex;justify-content:space-between;padding:8px 0 0;margin-top:4px;border-top:2px solid var(--carbon);font-size:15px;font-weight:700">' +
-            '<span>Total</span><span style="color:var(--cobre)">$' + Number(o.total).toLocaleString('es-AR') + '</span></div>' +
+            '<span>Total</span><span style="color:var(--cobre)">$' + Number(o.total || 0).toLocaleString('es-AR') + '</span></div>' +
             '</div>';
           $('orderModal').classList.add('open');
+        })
+        .withFailureHandler(function(err) {
+          showToast('Error al cargar detalle del pedido', 'error');
         })
         .getOrders();
     };
@@ -498,6 +527,9 @@
           $('cfg-store_tagline').value = config.store_tagline || '';
           $('cfg-whatsapp').value = config.whatsapp || '';
           $('cfg-delivery_info').value = config.delivery_info || '';
+        })
+        .withFailureHandler(function(err) {
+          showToast('Error al cargar configuración', 'error');
         })
         .getStoreConfig();
     }
@@ -528,6 +560,9 @@
             return '<span class="email-tag">' + esc(e) +
               ' <button onclick="removeAdmin(\'' + e.replace(/'/g, "\\'") + '\')">×</button></span>';
           }).join('');
+        })
+        .withFailureHandler(function(err) {
+          showToast('Error al cargar admins', 'error');
         })
         .getAdminEmails();
     }
