@@ -48,6 +48,8 @@ function getCurrentUserEmail() {
   return Session.getActiveUser().getEmail();
 }
 
+
+
 // ==================== STORE CONFIG ====================
 
 function getStoreConfig() {

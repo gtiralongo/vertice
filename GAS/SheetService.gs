@@ -173,23 +173,30 @@ function createOrder(data) {
 
 function getOrders() {
   ensureSheets();
-  var sheet = SpreadsheetApp.openById(SHEET_ID).getSheetByName('Pedidos');
-  var data = sheet.getDataRange().getValues();
-  if (data.length <= 1) return [];
+  var ss = SpreadsheetApp.openById(SHEET_ID);
+  var sheet = ss.getSheetByName('Pedidos');
+  var lastRow = sheet.getLastRow();
+  if (lastRow <= 1) return [];
+
+  var headers = sheet.getRange(1, 1, 1, 10).getValues()[0];
+  var data = sheet.getRange(2, 1, lastRow - 1, 10).getValues();
 
   var orders = [];
-  for (var i = 1; i < data.length; i++) {
+  for (var i = 0; i < data.length; i++) {
+    var row = data[i];
+    var itemsRaw = row[6] || '[]';
+    if (typeof itemsRaw !== 'string') itemsRaw = '[]';
     orders.push({
-      id: data[i][0] || '',
-      fecha: data[i][1] || '',
-      nombre: data[i][2] || '',
-      email: data[i][3] || '',
-      telefono: data[i][4] || '',
-      direccion: data[i][5] || '',
-      productos: data[i][6] || '[]',
-      total: Number(data[i][7]) || 0,
-      estado: data[i][8] || 'Pendiente',
-      notas: data[i][9] || ''
+      id: String(row[0] || ''),
+      fecha: String(row[1] || ''),
+      nombre: String(row[2] || ''),
+      email: String(row[3] || ''),
+      telefono: String(row[4] || ''),
+      direccion: String(row[5] || ''),
+      productos: itemsRaw,
+      total: Number(row[7]) || 0,
+      estado: String(row[8] || 'Pendiente'),
+      notas: String(row[9] || '')
     });
   }
   orders.reverse();

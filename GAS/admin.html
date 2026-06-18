@@ -9,47 +9,54 @@
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     :root {
-      --cobre: #8B6914; --cobre-brillo: #C9A84C; --carbon: #2D2926;
+      --cobre: #8B6914; --cobre-hover: #A07D1A; --cobre-brillo: #C9A84C;
+      --carbon: #2D2926; --carbon-soft: #3D3835;
       --crema: #F5F0E8; --blanco: #fff; --arena: #D4A574;
       --madera: #5D4E37; --verde: #5A7A4A;
-      --text-muted: #9B8B7A;
+      --text-muted: #9B8B7A; --text-light: #C4B8A8;
       --font-heading: 'Playfair Display', serif;
       --font-body: 'DM Sans', sans-serif;
-      --radius: 10px;
+      --radius: 10px; --radius-lg: 14px;
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.04);
       --shadow: 0 2px 12px rgba(0,0,0,0.06);
+      --shadow-lg: 0 8px 32px rgba(0,0,0,0.10);
+      --transition: 0.25s cubic-bezier(0.22, 1, 0.36, 1);
     }
     body {
       font-family: var(--font-body); background: var(--crema); color: var(--carbon);
       min-height: 100vh; -webkit-font-smoothing: antialiased;
     }
     .admin-header {
-      background: var(--carbon); padding: 16px 24px;
+      background: var(--carbon); padding: 14px 24px;
       display: flex; align-items: center; justify-content: space-between;
       position: sticky; top: 0; z-index: 100;
+      border-bottom: 1px solid rgba(201,168,76,0.08);
     }
     .admin-header h1 {
       font-family: var(--font-heading); font-size: 20px; color: var(--cobre-brillo);
+      letter-spacing: -0.3px;
     }
-    .admin-header .user-info { font-size: 13px; color: rgba(255,255,255,0.6); }
-    .admin-header .user-info span { color: var(--cobre-brillo); }
-    .admin-header a {
-      color: var(--arena); font-size: 13px; text-decoration: none;
-      margin-left: 16px; transition: color 0.2s;
+    .admin-header .user-info { font-size: 12px; color: rgba(255,255,255,0.45); }
+    .admin-header .user-info span { color: var(--cobre-brillo); font-weight: 500; }
+    .admin-header .header-links { display: flex; align-items: center; gap: 16px; }
+    .admin-header .header-links a {
+      color: var(--arena); font-size: 12px; text-decoration: none;
+      transition: var(--transition);
     }
-    .admin-header a:hover { color: var(--cobre-brillo); }
+    .admin-header .header-links a:hover { color: var(--cobre-brillo); }
 
     .tabs {
       display: flex; gap: 0; background: var(--blanco);
-      border-bottom: 1px solid rgba(0,0,0,0.06);
-      padding: 0 16px; overflow-x: auto;
-      position: sticky; top: 60px; z-index: 90;
+      border-bottom: 1px solid rgba(0,0,0,0.05);
+      padding: 0 20px; overflow-x: auto;
+      position: sticky; top: 58px; z-index: 90;
     }
     .tab-btn {
-      padding: 14px 20px; font-family: var(--font-body);
+      padding: 14px 22px; font-family: var(--font-body);
       font-size: 13px; font-weight: 600; color: var(--text-muted);
       background: none; border: none; cursor: pointer;
-      border-bottom: 2px solid transparent;
-      transition: all 0.2s; white-space: nowrap;
+      border-bottom: 2.5px solid transparent;
+      transition: var(--transition); white-space: nowrap;
     }
     .tab-btn:hover { color: var(--carbon); }
     .tab-btn.active { color: var(--cobre); border-bottom-color: var(--cobre); }
@@ -57,56 +64,78 @@
     .tab-content { display: none; padding: 24px; max-width: 1200px; margin: 0 auto; }
     .tab-content.active { display: block; }
 
-    h2 { font-family: var(--font-heading); font-size: 22px; margin-bottom: 20px; }
+    .section-header {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 20px; flex-wrap: wrap; gap: 12px;
+    }
+    .section-header h2 {
+      font-family: var(--font-heading); font-size: 22px;
+      letter-spacing: -0.3px;
+    }
 
-    .table-wrap { overflow-x: auto; background: var(--blanco); border-radius: var(--radius); box-shadow: var(--shadow); }
+    .table-wrap {
+      overflow-x: auto; background: var(--blanco);
+      border-radius: var(--radius-lg); box-shadow: var(--shadow);
+      border: 1px solid rgba(0,0,0,0.03);
+    }
     table { width: 100%; border-collapse: collapse; font-size: 13px; }
-    th, td { padding: 12px 16px; text-align: left; border-bottom: 1px solid rgba(0,0,0,0.04); }
-    th { background: var(--crema); font-weight: 600; color: var(--madera); font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; white-space: nowrap; }
+    th, td { padding: 12px 16px; text-align: left; border-bottom: 1px solid rgba(0,0,0,0.03); }
+    th {
+      background: var(--crema); font-weight: 600; color: var(--madera);
+      font-size: 11px; text-transform: uppercase; letter-spacing: 0.6px;
+      white-space: nowrap; position: sticky; top: 0;
+    }
+    tr:last-child td { border-bottom: none; }
     tr:hover td { background: rgba(139,105,20,0.02); }
 
     .btn {
-      padding: 8px 16px; border-radius: 8px; border: none;
+      padding: 8px 18px; border-radius: var(--radius); border: none;
       font-family: var(--font-body); font-size: 12px; font-weight: 600;
-      cursor: pointer; transition: all 0.2s;
+      cursor: pointer; transition: var(--transition);
+      display: inline-flex; align-items: center; gap: 6px;
     }
     .btn-primary { background: var(--carbon); color: var(--blanco); }
-    .btn-primary:hover { background: var(--cobre); }
-    .btn-sm { padding: 5px 12px; font-size: 11px; }
+    .btn-primary:hover { background: var(--cobre); transform: translateY(-1px); box-shadow: 0 4px 16px rgba(139,105,20,0.2); }
+    .btn-sm { padding: 5px 12px; font-size: 11px; border-radius: 8px; }
     .btn-success { background: var(--verde); color: var(--blanco); }
+    .btn-success:hover { background: #4D6B3E; }
     .btn-danger { background: #B00020; color: var(--blanco); }
-    .btn-outline { background: transparent; border: 1.5px solid rgba(0,0,0,0.1); color: var(--madera); }
+    .btn-danger:hover { background: #8F001A; }
+    .btn-outline { background: transparent; border: 1.5px solid rgba(0,0,0,0.08); color: var(--madera); }
     .btn-outline:hover { border-color: var(--cobre); color: var(--cobre); }
 
     .modal-overlay {
       position: fixed; inset: 0; z-index: 200;
-      background: rgba(0,0,0,0.4); backdrop-filter: blur(4px);
+      background: rgba(0,0,0,0.4); backdrop-filter: blur(6px);
       display: none; align-items: center; justify-content: center;
     }
     .modal-overlay.open { display: flex; }
     .modal-box {
-      background: var(--blanco); border-radius: 16px;
+      background: var(--blanco); border-radius: var(--radius-lg);
       padding: 28px 24px; width: calc(100% - 32px); max-width: 500px;
       max-height: 85vh; overflow-y: auto;
-      box-shadow: 0 24px 80px rgba(0,0,0,0.2);
+      box-shadow: 0 24px 80px rgba(0,0,0,0.15);
+      animation: modalIn 0.25s ease;
     }
+    @keyframes modalIn { from { opacity: 0; transform: scale(0.95) translateY(8px); } to { opacity: 1; transform: scale(1) translateY(0); } }
     .modal-box h3 { font-family: var(--font-heading); font-size: 20px; margin-bottom: 20px; }
     .modal-box .form-group { margin-bottom: 14px; }
-    .modal-box label { display: block; font-size: 12px; font-weight: 600; color: var(--text-muted); margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
+    .modal-box label { display: block; font-size: 11px; font-weight: 600; color: var(--text-muted); margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.6px; }
     .modal-box input, .modal-box textarea, .modal-box select {
       width: 100%; padding: 10px 12px;
-      border: 1.5px solid rgba(0,0,0,0.08); border-radius: 8px;
+      border: 1.5px solid rgba(0,0,0,0.06); border-radius: 8px;
       font-family: var(--font-body); font-size: 14px;
-      background: var(--crema); outline: none; transition: border-color 0.2s;
+      background: var(--crema); outline: none; transition: var(--transition);
     }
     .modal-box input:focus, .modal-box textarea:focus, .modal-box select:focus {
       border-color: var(--cobre); background: var(--blanco);
+      box-shadow: 0 0 0 3px rgba(139,105,20,0.08);
     }
     .modal-actions { display: flex; gap: 10px; margin-top: 20px; justify-content: flex-end; }
 
     .status-badge {
-      display: inline-block; padding: 3px 10px; border-radius: 10px;
-      font-size: 11px; font-weight: 600;
+      display: inline-block; padding: 3px 10px; border-radius: 8px;
+      font-size: 11px; font-weight: 600; letter-spacing: 0.2px;
     }
     .status-Pendiente { background: #FFF3CD; color: #856404; }
     .status-Confirmado { background: #D1ECF1; color: #0C5460; }
@@ -115,14 +144,17 @@
     .status-Entregado { background: #D4EDDA; color: #155724; }
     .status-Cancelado { background: #F8D7DA; color: #721C24; }
 
-    .empty-state { text-align: center; padding: 48px 20px; color: var(--text-muted); font-size: 14px; }
+    .empty-state { text-align: center; padding: 60px 20px; }
+    .empty-state p { color: var(--text-muted); font-size: 14px; }
+    .empty-state .sub { color: var(--text-light); font-size: 12px; margin-top: 4px; }
 
     .toast {
       position: fixed; bottom: 24px; left: 50%; z-index: 500;
       transform: translateX(-50%) translateY(80px);
       background: var(--carbon); color: var(--blanco);
-      padding: 12px 24px; border-radius: 10px;
+      padding: 12px 24px; border-radius: var(--radius);
       font-size: 14px; font-weight: 500;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.15);
       opacity: 0; transition: all 0.4s cubic-bezier(0.22,1,0.36,1);
       pointer-events: none;
     }
@@ -130,17 +162,38 @@
     .toast.success { background: var(--verde); }
     .toast.error { background: #B00020; }
 
+    .card {
+      background: var(--blanco); border-radius: var(--radius-lg);
+      padding: 24px; box-shadow: var(--shadow);
+      border: 1px solid rgba(0,0,0,0.03);
+    }
+    .card h3 {
+      font-family: var(--font-heading); font-size: 17px; margin-bottom: 16px;
+    }
     .config-grid { display: grid; gap: 16px; max-width: 500px; }
     .config-grid .form-group { margin-bottom: 0; }
-    .admin-emails { margin-top: 12px; }
+    .config-grid label { display: block; font-size: 11px; font-weight: 600; color: var(--text-muted); margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.6px; }
+    .config-grid input, .config-grid textarea {
+      width: 100%; padding: 10px 12px;
+      border: 1.5px solid rgba(0,0,0,0.06); border-radius: 8px;
+      font-family: var(--font-body); font-size: 14px;
+      background: var(--crema); outline: none; transition: var(--transition);
+    }
+    .config-grid input:focus, .config-grid textarea:focus {
+      border-color: var(--cobre); background: var(--blanco);
+      box-shadow: 0 0 0 3px rgba(139,105,20,0.08);
+    }
+
+    .admin-emails { margin-top: 12px; display: flex; flex-wrap: wrap; gap: 6px; }
     .admin-emails .email-tag {
       display: inline-flex; align-items: center; gap: 6px;
-      background: var(--crema); padding: 4px 10px; border-radius: 6px;
-      font-size: 12px; margin: 3px;
+      background: var(--crema); padding: 5px 10px; border-radius: 8px;
+      font-size: 12px;
     }
     .admin-emails .email-tag button {
       background: none; border: none; color: var(--text-muted);
-      cursor: pointer; font-size: 14px; line-height: 1;
+      cursor: pointer; font-size: 14px; line-height: 1; padding: 0 2px;
+      transition: var(--transition);
     }
     .admin-emails .email-tag button:hover { color: #B00020; }
 
@@ -150,6 +203,7 @@
       .admin-header { padding: 12px 14px; }
       .admin-header h1 { font-size: 17px; }
       .tab-btn { padding: 12px 14px; font-size: 12px; }
+      .section-header { flex-direction: column; align-items: stretch; }
     }
     @media (max-width: 400px) {
       .tab-content { padding: 10px; }
@@ -161,7 +215,7 @@
 <body>
   <header class="admin-header">
     <h1>Panel Admin</h1>
-    <div>
+    <div class="header-links">
       <span class="user-info" id="userInfo"></span>
       <a href="?page=store" target="_top">← Ver tienda</a>
     </div>
@@ -179,7 +233,7 @@
     </nav>
 
     <section class="tab-content active" id="tab-productos">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:10px">
+      <div class="section-header">
         <h2>Productos</h2>
         <button class="btn btn-primary" id="addProductBtn">+ Agregar Producto</button>
       </div>
@@ -202,21 +256,28 @@
     </section>
 
     <section class="tab-content" id="tab-config">
-      <h2>Configuración</h2>
-      <div class="config-grid">
-        <div class="form-group"><label>Nombre de tienda</label><input type="text" id="cfg-store_name"></div>
-        <div class="form-group"><label>Tagline</label><input type="text" id="cfg-store_tagline"></div>
-        <div class="form-group"><label>WhatsApp (código de área + número, sin +)</label><input type="text" id="cfg-whatsapp" placeholder="5491123456789"></div>
-        <div class="form-group"><label>Info de delivery</label><textarea id="cfg-delivery_info" rows="2"></textarea></div>
-        <div><button class="btn btn-primary" id="saveConfigBtn">Guardar Cambios</button></div>
+      <div class="section-header">
+        <h2>Configuración</h2>
       </div>
-      <hr style="margin:24px 0;border:none;border-top:1px solid rgba(0,0,0,0.06)">
-      <h3 style="font-family:var(--font-heading);font-size:18px;margin-bottom:12px">Admins autorizados</h3>
-      <div class="admin-emails" id="adminEmailsList"></div>
-      <div style="display:flex;gap:8px;margin-top:12px">
-        <input type="email" id="newAdminEmail" placeholder="Email del admin" style="padding:8px 12px;border:1.5px solid rgba(0,0,0,0.08);border-radius:8px;font-family:var(--font-body);flex:1;max-width:300px">
-        <button class="btn btn-primary" id="addAdminBtn">Agregar</button>
+      <div class="card" style="margin-bottom:20px">
+        <h3>Tienda</h3>
+        <div class="config-grid">
+          <div class="form-group"><label>Nombre de tienda</label><input type="text" id="cfg-store_name"></div>
+          <div class="form-group"><label>Tagline</label><input type="text" id="cfg-store_tagline"></div>
+          <div class="form-group"><label>WhatsApp (código de área + número, sin +)</label><input type="text" id="cfg-whatsapp" placeholder="5491123456789"></div>
+          <div class="form-group"><label>Info de delivery</label><textarea id="cfg-delivery_info" rows="2"></textarea></div>
+          <div><button class="btn btn-primary" id="saveConfigBtn">Guardar Cambios</button></div>
+        </div>
       </div>
+      <div class="card">
+        <h3>Admins autorizados</h3>
+        <div class="admin-emails" id="adminEmailsList"></div>
+        <div style="display:flex;gap:8px;margin-top:12px">
+          <input type="email" id="newAdminEmail" placeholder="Email del admin" style="padding:8px 12px;border:1.5px solid rgba(0,0,0,0.06);border-radius:8px;font-family:var(--font-body);flex:1;max-width:300px;outline:none;transition:0.25s ease;background:var(--crema)">
+          <button class="btn btn-primary" id="addAdminBtn">Agregar</button>
+        </div>
+      </div>
+
     </section>
   </div>
 
@@ -585,6 +646,7 @@
         .withFailureHandler(function() { showToast('Error al agregar', 'error'); })
         .addAdminEmail(email);
     });
+
   </script>
 </body>
 </html>
