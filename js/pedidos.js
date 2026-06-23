@@ -11,29 +11,43 @@ function renderizarProductos() {
   if (!grid) return;
   const productos = obtenerProductos().filter(p => p.activo);
 
-  grid.innerHTML = productos.map(p => {
-    const enCarrito = Carrito.items.find(i => i.id === p.id);
-    const cantidad = enCarrito ? enCarrito.cantidad : 0;
-    const sinStock = p.stock === 0;
+  const categorias = [
+    { clave: 'Botellas 750 ml', titulo: 'Botellas 750 ml — $16.000 c/u' },
+    { clave: 'Línea Especial', titulo: 'Línea Especial' },
+    { clave: 'Accesorios', titulo: 'Accesorios y Mixes' },
+    { clave: 'Combos', titulo: 'Combos y Packs' },
+  ];
 
-    return `
-      <div class="producto-card${sinStock ? ' sin-stock' : ''}">
-        <div class="producto-card__icon">${p.imagen}</div>
-        <h3>${p.nombre}</h3>
-        <div class="producto-card__sub">${p.subtitulo}</div>
-        <div class="producto-card__desc">${p.descripcion}</div>
-        <div class="producto-card__footer">
-          <span class="producto-card__precio">${formatearPrecio(p.precio)}</span>
-          ${sinStock
-            ? '<span class="sin-stock-badge">Sin stock</span>'
-            : `<button class="btn btn--cobre btn--add${cantidad > 0 ? ' agregado' : ''}" data-id="${p.id}">
-                ${cantidad > 0 ? '✓ Agregado' : '+ Agregar'}
-              </button>`
-          }
-        </div>
-      </div>
-    `;
-  }).join('');
+  let html = '';
+  categorias.forEach(cat => {
+    const items = productos.filter(p => p.categoria === cat.clave);
+    if (!items.length) return;
+    html += '<h3 class="categoria-titulo">' + esc(cat.titulo) + '</h3><div class="productos-subgrid">';
+    items.forEach(p => {
+      const enCarrito = Carrito.items.find(i => i.id === p.id);
+      const cantidad = enCarrito ? enCarrito.cantidad : 0;
+      const sinStock = p.stock === 0;
+      html +=
+        '<div class="producto-card' + (sinStock ? ' sin-stock' : '') + '" data-id="' + p.id + '">' +
+          '<div class="producto-card__icon">' + (p.imagen_url ? '<img src="' + esc(p.imagen_url) + '" alt="' + esc(p.nombre) + '" class="producto-card__img">' : (p.imagen || '🍸')) + '</div>' +
+          '<h3>' + esc(p.nombre) + '</h3>' +
+          (p.subtitulo ? '<div class="producto-card__sub">' + esc(p.subtitulo) + '</div>' : '') +
+          '<div class="producto-card__desc">' + esc(p.descripcion) + '</div>' +
+          '<div class="producto-card__footer">' +
+            '<span class="producto-card__precio">' + formatearPrecio(p.precio) + '</span>' +
+            '<div class="producto-card__actions">' +
+              '<a href="producto.html?id=' + p.id + '" class="btn btn--outline btn--sm">Detalle</a>';
+      if (sinStock) {
+        html += '<span class="sin-stock-badge">Sin stock</span>';
+      } else {
+        html += '<button class="btn btn--cobre btn--add' + (cantidad > 0 ? ' agregado' : '') + '" data-id="' + p.id + '">' + (cantidad > 0 ? '✓ Agregado' : '+ Agregar') + '</button>';
+      }
+      html += '</div></div></div>';
+    });
+    html += '</div>';
+  });
+
+  grid.innerHTML = html;
 
   grid.querySelectorAll('.btn--add').forEach(btn => {
     btn.addEventListener('click', () => {
@@ -196,17 +210,16 @@ function bindCheckout() {
 
     const nombre = document.getElementById('nombre').value.trim();
     const telefono = document.getElementById('telefono').value.trim();
-    const direccion = document.getElementById('direccion').value.trim();
     const notas = document.getElementById('notas').value.trim();
 
-    if (!nombre || !telefono || !direccion) {
+    if (!nombre || !telefono) {
       showToast('Completá todos los campos obligatorios');
       btn.disabled = false;
       btn.innerHTML = 'Comprar';
       return;
     }
 
-    guardarPedidoEnLocal(nombre, telefono, direccion, notas);
+    guardarPedidoEnLocal(nombre, telefono, '', notas);
 
     cerrarCheckout();
     mostrarConfirmacion();
@@ -244,6 +257,8 @@ function mostrarConfirmacion() {
   document.getElementById('confirmation-container').style.display = 'block';
   document.getElementById('confirmation-container').scrollIntoView({ behavior: 'smooth' });
 }
+
+function esc(s) { if (!s) return ''; return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 
 function showToast(msg) {
   const existing = document.querySelector('.toast-notification');

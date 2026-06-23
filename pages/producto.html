@@ -3,46 +3,46 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Vértice Gin Clásico — Ficha Técnica, Botánicos y Notas de Cata</title>
-  <meta name="description" content="42% ABV. Quinotos y naranjas amargas de la plaza de Pasteur. Small batch 70 bot/semana. Alambique cobre 20L. Conocé todos los detalles de Vértice Gin.">
-  <meta name="keywords" content="vertice gin clasico, ficha tecnica gin, gin 42 grados, gin con quinotos, gin artesanal argentina, botánicos gin pasteur, alambique cobre">
+  <title>Nuestras Producciones — Vértice Gin de Pueblo</title>
+  <meta name="description" content="Conocé nuestras producciones: Clásica, Macerada, Limón y Puente Aperitivo. Gin artesanal destilado en alambique de cobre en Pasteur.">
+  <meta name="keywords" content="vertice gin clasica, vertice macerada, vertice limon, puente aperitivo, gin artesanal pasteur">
   <link rel="canonical" href="https://verticegin.com.ar/pages/producto.html">
 
   <meta property="og:type" content="website">
-  <meta property="og:title" content="Vértice Gin Clásico — Ficha Técnica del Producto">
-  <meta property="og:description" content="42% ABV. Small batch. Botánicos de la plaza de Pasteur. Conocé todos los detalles.">
+  <meta property="og:title" content="Nuestras Producciones — Vértice Gin de Pueblo">
+  <meta property="og:description" content="Clásica, Macerada, Limón y Puente Aperitivo. Gin artesanal de Pasteur.">
   <meta property="og:url" content="https://verticegin.com.ar/pages/producto.html">
   <meta property="og:image" content="https://verticegin.com.ar/images/og-producto.jpg">
   <meta property="og:locale" content="es_AR">
 
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Vértice Gin Clásico — Ficha Técnica">
-
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "Product",
-    "name": "Vértice Gin Clásico",
-    "description": "Gin artesanal small batch. 42% ABV, 750ml. Destilado en alambique de cobre de 20L con botánicos locales.",
-    "brand": {"@type":"Brand","name":"Vértice Gin"},
-    "category": "Bebida Alcohólica > Gin",
-    "alcoholContent": "42% ABV",
-    "size": "750 ml",
-    "production": "Small batch (~70 botellas/semana)",
-    "offers": {
-      "@type": "Offer",
-      "availability": "https://schema.org/InStock",
-      "priceCurrency": "ARS",
-      "seller": {"@type":"Organization","name":"Vértice Gin"}
-    }
-  }
-  </script>
+  <meta name="twitter:title" content="Nuestras Producciones — Vértice Gin de Pueblo">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400;1,700&family=DM+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../css/style.css">
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍸</text></svg>">
+  <style>
+    .prod-nav { display:flex; gap:8px; flex-wrap:wrap; justify-content:center; margin-top:16px; }
+    .prod-nav a { font-family:var(--font-mono); font-size:0.75rem; text-transform:uppercase; letter-spacing:0.05em; padding:6px 14px; border-radius:var(--radius-full); background:var(--blanco); color:var(--carbon); text-decoration:none; border:1px solid rgba(45,41,38,0.1); transition:all var(--duration-fast); }
+    .prod-nav a:hover { background:var(--verde); color:var(--blanco); border-color:var(--verde); }
+    .producto-catalog { display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:24px; margin-top:32px; }
+    .producto-catalog__card {
+      background:var(--blanco-puro); border-radius:var(--radius-lg); overflow:hidden;
+      text-decoration:none; color:inherit; transition:all var(--duration-base) var(--ease-out);
+      box-shadow:var(--shadow-md); display:flex; flex-direction:column;
+    }
+    .producto-catalog__card:hover { transform:translateY(-4px); box-shadow:var(--shadow-xl); }
+    .producto-catalog__img-wrap {
+      aspect-ratio:3/4; overflow:hidden; background:var(--madera-low);
+      display:flex; align-items:center; justify-content:center; font-size:80px;
+    }
+    .producto-catalog__info { padding:16px; display:flex; flex-direction:column; gap:4px; flex:1; }
+    .producto-catalog__info h3 { font-family:var(--font-mono); font-size:16px; text-transform:uppercase; letter-spacing:0.03em; }
+    .producto-catalog__sub { font-size:13px; color:var(--text-muted); }
+    .producto-catalog__price { font-size:18px; font-weight:700; color:var(--verde); margin-top:auto; padding-top:8px; }
+  </style>
 </head>
 <body>
 
@@ -70,7 +70,6 @@
         <a href="historia.html">Nuestra Historia</a>
         <a href="producto.html">Producto</a>
         <a href="cocteleria.html">Coctelería</a>
-        <a href="donde-comprar.html">Dónde Comprar</a>
         <a href="pedidos.html">Pedidos</a>
       </nav>
       <button class="hamburger" aria-label="Menú">
@@ -82,168 +81,7 @@
   </header>
   <div class="nav-overlay"></div>
 
-  <!-- ===== PAGE HEADER ===== -->
-  <section class="page-header page-header--sm">
-    <div class="container page-header__content">
-      <div class="breadcrumb">
-        <a href="../">Inicio</a>
-        <span>/</span>
-        <span>Producto</span>
-      </div>
-      <p class="subtitle" style="color:var(--naranja-light);">Small batch · Alambique de cobre</p>
-      <h1>Vértice Gin Clásico</h1>
-      <p>42% ABV · 750 ml · Destilado artesanal en Pasteur</p>
-    </div>
-  </section>
-
-  <!-- ===== PRODUCT SHOWCASE ===== -->
-  <section class="section">
-    <div class="container">
-      <div class="product-showcase">
-        <div class="product-showcase__visual fade-in">
-          <div class="product-bottle">
-            🍸
-            <span style="position:absolute;bottom:24px;font-size:0.9rem;color:var(--text-muted);letter-spacing:0.05em;">Imagen 360° de la botella</span>
-          </div>
-          <div class="product-notes" style="justify-content:center;margin-top:var(--space-md);">
-            <span>🌿 Enebro</span>
-            <span>🍊 Quinoto</span>
-            <span>🍋 Naranja amarga</span>
-            <span>🌸 Coriandro</span>
-            <span>🌰 Cardamomo</span>
-            <span>🪵 Cassia</span>
-          </div>
-        </div>
-        <div class="fade-in">
-          <p class="subtitle">Ficha técnica</p>
-          <h2>Un gin con identidad de pueblo</h2>
-          <p style="color:var(--text-secondary);">Vértice Gin Clásico es un gin equilibrado, con presencia del enebro como protagonista y un giro cítrico único que le dan los quinotos y naranjas amargas cosechados en la plaza de Pasteur. Cada botella es numerada y corresponde a una partida limitada.</p>
-
-          <div class="product-specs">
-            <div class="spec-item">
-              <div class="spec-item__label">Alcohol</div>
-              <div class="spec-item__value">42% ABV</div>
-            </div>
-            <div class="spec-item">
-              <div class="spec-item__label">Formato</div>
-              <div class="spec-item__value">750 ml</div>
-            </div>
-            <div class="spec-item">
-              <div class="spec-item__label">Producción</div>
-              <div class="spec-item__value">~70 bot/semana</div>
-            </div>
-            <div class="spec-item">
-              <div class="spec-item__label">Alambique</div>
-              <div class="spec-item__value">Cobre 20 L</div>
-            </div>
-            <div class="spec-item">
-              <div class="spec-item__label">Estilo</div>
-              <div class="spec-item__value">Contemporary Gin</div>
-            </div>
-            <div class="spec-item">
-              <div class="spec-item__label">Botánicos</div>
-              <div class="spec-item__value">8 especies</div>
-            </div>
-          </div>
-
-          <div style="margin-top:var(--space-lg);display:flex;gap:var(--space-sm);flex-wrap:wrap;">
-            <a href="pedidos.html" class="btn btn--primary btn--lg">🛒 Hacé tu pedido</a>
-            <a href="donde-comprar.html" class="btn btn--outline">Ver puntos de venta</a>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ===== BOTÁNICOS ===== -->
-  <section class="section section--cream">
-    <div class="section__wood"></div>
-    <div class="container">
-      <div class="section__header fade-in">
-        <p class="subtitle">Los ingredientes</p>
-        <h2>Botánicos seleccionados</h2>
-        <p>Ocho especies que se combinan en equilibrio. La mitad son de Pasteur.</p>
-      </div>
-      <div class="botanicos-grid">
-        <div class="botanico-card fade-in">
-          <div class="botanico-card__icon">🌲</div>
-          <h4>Enebro</h4>
-          <p>La base de todo gin. Seleccionado por su perfil resinoso y fresco.</p>
-        </div>
-        <div class="botanico-card fade-in">
-          <div class="botanico-card__icon">🍊</div>
-          <h4>Quinoto 🌿</h4>
-          <p><strong>De la plaza de Pasteur.</strong> Aporta una acidez cítrica única, dulce y amarga a la vez.</p>
-        </div>
-        <div class="botanico-card fade-in">
-          <div class="botanico-card__icon">🍋</div>
-          <h4>Naranja amarga 🌿</h4>
-          <p><strong>De la plaza de Pasteur.</strong> Notas cítricas profundas que equilibran el enebro.</p>
-        </div>
-        <div class="botanico-card fade-in">
-          <div class="botanico-card__icon">🌿</div>
-          <h4>Coriandro</h4>
-          <p>Aporta un perfil herbal y ligeramente cítrico. Frescura en cada gota.</p>
-        </div>
-        <div class="botanico-card fade-in">
-          <div class="botanico-card__icon">🌰</div>
-          <h4>Cardamomo</h4>
-          <p>Notas especiadas y ligeramente dulces. Calidez en el fondo de boca.</p>
-        </div>
-        <div class="botanico-card fade-in">
-          <div class="botanico-card__icon">🪵</div>
-          <h4>Cassia</h4>
-          <p>Canela china sutil. Aporta estructura y un toque especiado suave.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ===== PROCESS ===== -->
-  <section class="section section--dark">
-    <div class="container">
-      <div class="section__header fade-in">
-        <p class="subtitle" style="color:var(--naranja-light);">El proceso</p>
-        <h2>Cómo lo hacemos</h2>
-        <p style="color:var(--arena);">De la selección de botánicos al embotellado. Cada paso es manual, cada lote es único.</p>
-      </div>
-      <div class="process-steps">
-        <div class="process-step fade-in">
-          <div class="process-step__number">1</div>
-          <h4>Selección de botánicos</h4>
-          <p>Cosechamos quinotos y naranjas de la plaza de Pasteur. El resto de los botánicos los elegimos uno por uno con proveedores de confianza.</p>
-        </div>
-        <div class="process-step fade-in">
-          <div class="process-step__number">2</div>
-          <h4>Maceración</h4>
-          <p>Los botánicos maceran en alcohol neutro de alta calidad durante 24 horas. El tiempo justo para extraer sus aceites esenciales.</p>
-        </div>
-        <div class="process-step fade-in">
-          <div class="process-step__number">3</div>
-          <h4>Destilación en cobre</h4>
-          <p>Alambique de cobre de 20 litros. El cobre respeta los botánicos y elimina impurezas. Controlamos temperatura y caudal gota a gota.</p>
-        </div>
-        <div class="process-step fade-in">
-          <div class="process-step__number">4</div>
-          <h4>Embotellado artesanal</h4>
-          <p>Cada botella se llena, etiqueta y numera a mano. Producimos ~70 por semana. No más, para mantener la calidad.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ===== CTA ===== -->
-  <section class="section section--cream">
-    <div class="section__wood"></div>
-    <div class="container">
-      <div class="cta-section fade-in">
-        <p class="subtitle">¿Listo para probarlo?</p>
-        <h2>Pedí tu botella</h2>
-        <p>Hacé tu pedido online y te contactamos para coordinar el envío a todo el país.</p>
-        <a href="pedidos.html" class="btn btn--primary btn--lg">🛒 Hacé tu pedido</a>
-      </div>
-    </div>
-  </section>
+  <div id="producto-content"></div>
 
   <!-- ===== FOOTER ===== -->
   <footer class="footer">
@@ -268,7 +106,6 @@
             <li><a href="historia.html">Nuestra Historia</a></li>
             <li><a href="producto.html">Producto</a></li>
             <li><a href="cocteleria.html">Coctelería</a></li>
-            <li><a href="donde-comprar.html">Dónde Comprar</a></li>
             <li><a href="pedidos.html">Pedidos</a></li>
           </ul>
         </div>
@@ -313,5 +150,138 @@
   </div>
 
   <script src="../js/main.js"></script>
+  <script>
+  var PRODS = [
+    { id:1, nombre:'Vértice Clásica', subtitulo:'750 ml · 42% ABV', precio:16000, emoji:'🍸', categoria:'Gin',
+      desc:'El corazón de la marca, destilado con botánicos seleccionados que respetan la esencia del London Dry con un toque propio de Pasteur.',
+      descLarga:'Vértice Clásica es nuestro gin insignia. Destilado en alambique de cobre de 20 L siguiendo la tradición London Dry, con un giro único que le dan los quinotos y naranjas amargas cosechados en la plaza de Pasteur. Un gin equilibrado, con presencia del enebro como protagonista y un final cítrico inconfundible.',
+      specs:[{l:'Alcohol',v:'42% ABV'},{l:'Formato',v:'750 ml'},{l:'Estilo',v:'London Dry'},{l:'Alambique',v:'Cobre 20 L'},{l:'Producción',v:'Small batch'}],
+      notas:['Enebro','Quinoto','Naranja amarga','Coriandro','Cardamomo','Cassia'],
+      botanicos:[
+        {n:'Enebro',d:'La base de todo gin. Seleccionado por su perfil resinoso y fresco.',i:'🌲'},
+        {n:'Quinoto',d:'Aporta una acidez cítrica única, dulce y amarga a la vez.',i:'🍊',local:true},
+        {n:'Naranja amarga',d:'Notas cítricas profundas que equilibran el enebro.',i:'🍋',local:true},
+        {n:'Coriandro',d:'Aporta un perfil herbal y ligeramente cítrico.',i:'🌿'},
+        {n:'Cardamomo',d:'Notas especiadas y ligeramente dulces.',i:'🌰'},
+        {n:'Cassia',d:'Canela china sutil. Aporta estructura y un toque especiado suave.',i:'🪵'}
+      ],
+      proceso:[
+        {n:1,t:'Selección de botánicos',d:'Cosechamos quinotos y naranjas de la plaza de Pasteur. El resto de los botánicos los elegimos uno por uno.'},
+        {n:2,t:'Maceración',d:'Los botánicos maceran en alcohol neutro de alta calidad durante 24 horas.'},
+        {n:3,t:'Destilación en cobre',d:'Alambique de cobre de 20 litros. Controlamos temperatura y caudal gota a gota.'},
+        {n:4,t:'Embotellado artesanal',d:'Cada botella se llena, etiqueta y numera a mano. Partidas limitadas.'}
+      ]},
+    { id:2, nombre:'Vértice Macerada', subtitulo:'750 ml · 42% ABV', precio:16000, emoji:'🥃', categoria:'Gin',
+      desc:'Una versión con carácter, donde los botánicos reposan más tiempo para extraer una mayor profundidad de sabor y aromas intensos.',
+      descLarga:'Vértice Macerada lleva el proceso un paso más allá. Los mismos botánicos de la Clásica, pero con una maceración extendida de 48 horas que extrae una mayor profundidad de sabor y aromas más intensos. Ideal para quienes buscan una experiencia más compleja.',
+      specs:[{l:'Alcohol',v:'42% ABV'},{l:'Formato',v:'750 ml'},{l:'Estilo',v:'London Dry — Maceración extendida'},{l:'Alambique',v:'Cobre 20 L'},{l:'Maceración',v:'48 horas'}],
+      notas:['Enebro','Quinoto','Naranja amarga','Coriandro','Cardamomo','Cassia','Pimienta negra'],
+      botanicos:[
+        {n:'Enebro',d:'Perfil resinoso intensificado por la maceración.',i:'🌲'},
+        {n:'Quinoto',d:'Acidez cítrica más profunda con la maceración extendida.',i:'🍊',local:true},
+        {n:'Naranja amarga',d:'Notas cítricas que se potencian con el reposo.',i:'🍋',local:true},
+        {n:'Coriandro',d:'Perfil herbal y ligeramente cítrico.',i:'🌿'},
+        {n:'Cardamomo',d:'Notas especiadas que ganan intensidad.',i:'🌰'},
+        {n:'Cassia',d:'Canela china. Estructura y calidez.',i:'🪵'},
+        {n:'Pimienta negra',d:'Un toque picante sutil que redondea el perfil.',i:'🌶️'}
+      ],
+      proceso:[
+        {n:1,t:'Selección de botánicos',d:'Los mismos botánicos de la Clásica, seleccionados uno por uno.'},
+        {n:2,t:'Maceración extendida',d:'48 horas de reposo en alcohol neutro. El doble de tiempo para extraer al máximo los aceites esenciales.'},
+        {n:3,t:'Destilación lenta',d:'Alambique de cobre de 20 litros. Destilación más lenta para capturar los compuestos más pesados.'},
+        {n:4,t:'Embotellado artesanal',d:'Cada botella se llena, etiqueta y numera a mano.'}
+      ]},
+    { id:3, nombre:'Vértice Limón', subtitulo:'750 ml · 42% ABV', precio:16000, emoji:'🍋', categoria:'Gin',
+      desc:'Inspirada en la frescura cítrica, ideal para quienes buscan un Gin Tonic más ligero y refrescante.',
+      descLarga:'Vértice Limón nace de la idea de un gin cítrico y refrescante sin perder la esencia artesanal. Botánicos seleccionados con protagonismo del limón, la naranja y el pomelo. Vibrante, perfecto para tardes de calor y para quienes buscan un trago más ligero.',
+      specs:[{l:'Alcohol',v:'42% ABV'},{l:'Formato',v:'750 ml'},{l:'Estilo',v:'Contemporary Citrus Gin'},{l:'Alambique',v:'Cobre 20 L'},{l:'Perfil',v:'Cítrico y refrescante'}],
+      notas:['Enebro','Limón','Naranja','Pomelo','Menta','Jengibre'],
+      botanicos:[
+        {n:'Enebro',d:'La base del gin, aquí más suave para dejar lugar a los cítricos.',i:'🌲'},
+        {n:'Limón',d:'Frescura y acidez natural de Pasteur.',i:'🍋',local:true},
+        {n:'Naranja',d:'Dulzor cítrico que equilibra la acidez del limón.',i:'🍊',local:true},
+        {n:'Pomelo',d:'Amargor cítrico sutil que aporta complejidad.',i:'🍈',local:true},
+        {n:'Menta',d:'Frescura herbal que realza el perfil refrescante.',i:'🌿'},
+        {n:'Jengibre',d:'Un toque picante y aromático que despierta el paladar.',i:'🫚'}
+      ],
+      proceso:[
+        {n:1,t:'Selección de botánicos',d:'Cítricos frescos de Pasteur combinados con botánicos clásicos.'},
+        {n:2,t:'Maceración',d:'24 horas en alcohol neutro. Las cáscaras de cítricos aportan sus aceites esenciales.'},
+        {n:3,t:'Destilación en cobre',d:'Destilación cuidadosa para preservar los aromas cítricos volátiles.'},
+        {n:4,t:'Embotellado artesanal',d:'Cada botella se llena, etiqueta y numera a mano.'}
+      ]},
+    { id:4, nombre:'Puente Aperitivo Cítrico', subtitulo:'500 ml · 18% ABV', precio:10000, emoji:'🍹', categoria:'Aperitivo',
+      desc:'Una nueva propuesta, vibrante y refrescante, diseñada para ser el puente perfecto en tus aperitivos.',
+      descLarga:'Puente es nuestro aperitivo cítrico. Menor graduación alcohólica que nuestro gin, pensado para esos momentos donde querés algo más ligero pero con carácter. Ideal con soda, hielo y una rodaja de naranja. También funciona como base para cócteles de aperitivo.',
+      specs:[{l:'Alcohol',v:'18% ABV'},{l:'Formato',v:'500 ml'},{l:'Perfil',v:'Cítrico — Aperitivo'},{l:'Maridaje',v:'Soda, hielo, naranja'}],
+      notas:['Naranja','Limón','Pomelo','Enebro','Ruibarbo']}
+  ];
+
+  function esc(s) { if (!s) return ''; return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+  function $$(n) { return '$' + Number(n).toLocaleString('es-AR'); }
+
+  document.addEventListener('DOMContentLoaded', function () {
+    var p = new URLSearchParams(window.location.search);
+    var id = p.get('id');
+    if (id) {
+      var prod = PRODS.find(function(x) { return x.id === Number(id); });
+      if (prod) { renderDetail(prod); return; }
+    }
+    renderCatalog(PRODS);
+  });
+
+  function renderCatalog(lista) {
+    var main = document.getElementById('producto-content');
+    main.innerHTML =
+      '<section class="section section--cream" style="padding-top:calc(var(--header-height,72px) + 48px);"><div class="section__wood"></div><div class="container"><div class="section__header"><p class="subtitle">Nuestras producciones</p><h2>Hecho en Pasteur</h2><p>Cada una de nuestras creaciones, destilada en alambique de cobre con botánicos seleccionados.</p></div><div class="prod-nav">' +
+      lista.map(function(p) { return '<a href="producto.html?id=' + p.id + '">' + esc(p.nombre) + '</a>'; }).join('') +
+      '</div><div class="producto-catalog">' +
+      lista.map(function(p) {
+        return '<a href="producto.html?id=' + p.id + '" class="producto-catalog__card"><div class="producto-catalog__img-wrap"><span style="font-size:80px;">' + (p.emoji || '🍸') + '</span></div><div class="producto-catalog__info"><h3>' + esc(p.nombre) + '</h3><p class="producto-catalog__sub">' + esc(p.subtitulo) + '</p><span class="producto-catalog__price">' + $$(p.precio) + '</span></div></a>';
+      }).join('') +
+      '</div></div></section>';
+  }
+
+  function renderDetail(prod) {
+    document.title = esc(prod.nombre) + ' — Ficha Técnica y Notas de Cata';
+    var md = document.querySelector('meta[name="description"]');
+    if (md) md.content = esc(prod.descLarga || prod.desc);
+    var ogt = document.querySelector('meta[property="og:title"]');
+    if (ogt) ogt.content = esc(prod.nombre) + ' — Ficha Técnica';
+    var ogd = document.querySelector('meta[property="og:description"]');
+    if (ogd) ogd.content = esc(prod.descLarga || prod.desc);
+    var twt = document.querySelector('meta[name="twitter:title"]');
+    if (twt) twt.content = esc(prod.nombre) + ' — Ficha Técnica';
+
+    var visual = '<span style="font-size:4rem;">' + (prod.emoji || '🍸') + '</span>';
+    var notes = prod.notas && prod.notas.length
+      ? '<div class="product-notes" style="justify-content:center;margin-top:var(--space-md);">' + prod.notas.map(function(n) { return '<span>' + esc(n) + '</span>'; }).join('') + '</div>'
+      : '';
+    var specs = (prod.specs||[]).map(function(s) { return '<div class="spec-item"><div class="spec-item__label">' + esc(s.l) + '</div><div class="spec-item__value">' + esc(s.v) + '</div></div>'; }).join('');
+    var localCount = prod.botanicos ? prod.botanicos.filter(function(b) { return b.local; }).length : 0;
+
+    var botanicosSec = prod.botanicos && prod.botanicos.length
+      ?         '<section class="section section--cream"><div class="section__wood"></div><div class="container"><div class="section__header"><p class="subtitle">Los ingredientes</p><h2>Botánicos seleccionados</h2><p>Especies seleccionadas que se combinan en equilibrio.' + (localCount > 0 ? ' ' + localCount + ' son de Pasteur.' : '') + '</p></div><div class="botanicos-grid">' +
+        prod.botanicos.map(function(b) { return '<div class="botanico-card"><div class="botanico-card__icon">' + (b.i||'🌿') + '</div><h4>' + esc(b.n) + (b.local ? ' 🌿' : '') + '</h4><p>' + (b.local ? '<strong>De la plaza de Pasteur.</strong> ' : '') + esc(b.d) + '</p></div>'; }).join('') +
+        '</div></div></section>'
+      : '';
+
+    var processSec = prod.proceso && prod.proceso.length
+      ?         '<section class="section section--dark"><div class="container"><div class="section__header"><p class="subtitle" style="color:var(--naranja-light);">El proceso</p><h2>Cómo lo hacemos</h2><p style="color:var(--arena);">Cada paso es manual, cada lote es único.</p></div><div class="process-steps">' +
+        prod.proceso.map(function(s) { return '<div class="process-step"><div class="process-step__number">' + s.n + '</div><h4>' + esc(s.t) + '</h4><p>' + esc(s.d) + '</p></div>'; }).join('') +
+        '</div></div></section>'
+      : '';
+
+    var ctaSec = '<section class="section section--cream"><div class="section__wood"></div><div class="container"><div class="cta-section"><p class="subtitle">¿Listo para probarlo?</p><h2>Pedí tu botella</h2><p>Hacé tu pedido online y te contactamos para coordinar el envío a todo el país.</p><a href="pedidos.html" class="btn btn--primary btn--lg">🛒 Hacé tu pedido</a></div></div></section>';
+
+    var main = document.getElementById('producto-content');
+    main.innerHTML =
+      '<section style="padding-top:calc(var(--header-height,72px) + 32px);text-align:center;background:var(--verde-dark);color:var(--text-light);padding-bottom:var(--space-xl);"><div class="container"><div class="breadcrumb" style="justify-content:center;margin-bottom:var(--space-sm);"><a href="../" style="color:var(--madera-high);">Inicio</a><span style="color:var(--madera-high);opacity:0.5;">/</span><a href="producto.html" style="color:var(--madera-high);">Producciones</a><span style="color:var(--madera-high);opacity:0.5;">/</span><span style="color:var(--text-light);opacity:0.7;">' + esc(prod.nombre) + '</span></div><p class="subtitle" style="color:var(--naranja-light);margin-bottom:4px;">' + esc(prod.categoria) + '</p><h1 style="color:var(--text-light);margin-bottom:var(--space-sm);">' + esc(prod.nombre) + '</h1><p style="color:var(--madera-high);max-width:600px;margin:0 auto;">' + esc(prod.subtitulo) + '</p></div></section>' +
+      '<section class="section"><div class="container"><div class="product-showcase"><div class="product-showcase__visual"><div class="product-bottle">' + visual + notes + '</div></div><div><p class="subtitle">Ficha técnica</p><h2>' + esc(prod.nombre) + '</h2><p style="color:var(--text-secondary);">' + esc(prod.descLarga || prod.desc) + '</p>' +
+      (specs ? '<div class="product-specs">' + specs + '</div>' : '') +
+      '<div style="margin-top:var(--space-lg);display:flex;gap:var(--space-sm);flex-wrap:wrap;align-items:center;"><span style="font-size:24px;font-weight:700;color:var(--verde);">' + $$(prod.precio) + '</span><a href="pedidos.html" class="btn btn--primary btn--lg">🛒 Hacé tu pedido</a></div></div></div></div></section>' +
+      botanicosSec + processSec + ctaSec;
+  }
+  </script>
 </body>
 </html>

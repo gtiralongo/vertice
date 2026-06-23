@@ -20,9 +20,22 @@
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍸</text></svg>">
   <style>
     .productos-grid {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-xl);
+    }
+    .productos-subgrid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
       gap: var(--space-lg);
+    }
+    .categoria-titulo {
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--naranja);
+      margin-bottom: var(--space-sm);
     }
     .producto-card {
       background: var(--blanco);
@@ -40,6 +53,15 @@
     .producto-card__icon {
       font-size: 2.5rem;
       margin-bottom: var(--space-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .producto-card__img {
+      width: 100%;
+      aspect-ratio: 1/1;
+      object-fit: cover;
+      border-radius: var(--radius-sm);
     }
     .producto-card h3 {
       font-size: 1.15rem;
@@ -60,11 +82,16 @@
     }
     .producto-card__footer {
       display: flex;
-      align-items: center;
-      justify-content: space-between;
+      flex-direction: column;
       gap: var(--space-sm);
       padding-top: var(--space-md);
       border-top: 1px solid rgba(45,41,38,0.04);
+    }
+    .producto-card__actions {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-sm);
     }
     .producto-card__precio {
       font-family: var(--font-serif);
@@ -405,7 +432,6 @@
         <a href="historia.html">Nuestra Historia</a>
         <a href="producto.html">Producto</a>
         <a href="cocteleria.html">Coctelería</a>
-        <a href="donde-comprar.html">Dónde Comprar</a>
         <a href="pedidos.html">
           Pedidos
           <span class="cart-count" id="cart-count-header">0</span>
@@ -474,9 +500,9 @@
         <label for="telefono">Teléfono / WhatsApp *</label>
         <input type="tel" id="telefono" name="telefono" placeholder="Ej: 2355 123456" required>
       </div>
-      <div class="form-group">
-        <label for="direccion">Dirección de entrega *</label>
-        <textarea id="direccion" name="direccion" placeholder="Calle, número, localidad, provincia" required></textarea>
+      <div class="form-group" style="display:none;">
+        <label for="direccion">Dirección de entrega</label>
+        <textarea id="direccion" name="direccion" placeholder="Calle, número, localidad, provincia"></textarea>
       </div>
       <div class="form-group">
         <label for="notas">Notas (opcional)</label>
@@ -522,7 +548,6 @@
             <li><a href="historia.html">Nuestra Historia</a></li>
             <li><a href="producto.html">Producto</a></li>
             <li><a href="cocteleria.html">Coctelería</a></li>
-            <li><a href="donde-comprar.html">Dónde Comprar</a></li>
             <li><a href="pedidos.html">Pedidos</a></li>
           </ul>
         </div>

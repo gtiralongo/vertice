@@ -445,7 +445,6 @@ function verPedido(idx) {
         <h4>Cliente</h4>
         <p><strong>Nombre:</strong> ${esc(o.nombre)}</p>
         <p><strong>Teléfono:</strong> <a href="https://wa.me/${esc(o.telefono)}" target="_blank" style="color:var(--cobre);">${esc(o.telefono)}</a></p>
-        <p><strong>Dirección:</strong> ${esc(o.direccion)}</p>
         ${o.notas ? '<p><strong>Notas:</strong> ' + esc(o.notas) + '</p>' : ''}
       </div>
       <div class="order-detail-section">
