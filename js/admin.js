@@ -1,49 +1,168 @@
 let productosEditables = [];
+let confirmCallback = null;
 
 document.addEventListener('DOMContentLoaded', () => {
+  initSidebar();
   initTabs();
+  bindModals();
   cargarProductos();
   cargarPedidos();
   cargarConfig();
   bindProductModal();
   bindConfig();
   bindJsonActions();
+  bindDashboard();
 });
 
+function initSidebar() {
+  document.getElementById('menuToggle').addEventListener('click', () => {
+    document.getElementById('sidebar').classList.toggle('sidebar--open');
+    document.getElementById('sidebarOverlay').classList.toggle('sidebar-overlay--visible');
+  });
+  document.getElementById('sidebarOverlay').addEventListener('click', () => {
+    document.getElementById('sidebar').classList.remove('sidebar--open');
+    document.getElementById('sidebarOverlay').classList.remove('sidebar-overlay--visible');
+  });
+}
+
 function initTabs() {
-  document.querySelectorAll('.tab-btn').forEach(btn => {
+  document.querySelectorAll('.sidebar__link[data-tab]').forEach(btn => {
     btn.addEventListener('click', () => {
-      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.sidebar__link').forEach(b => b.classList.remove('active'));
       document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
       btn.classList.add('active');
       const tab = document.getElementById('tab-' + btn.dataset.tab);
       if (tab) tab.classList.add('active');
+      document.querySelector('#headerTitle h2').textContent = btn.querySelector('.sidebar__link-label').textContent;
+      const subtitles = { dashboard: 'Panel de control', productos: 'Gestión de productos', pedidos: 'Gestión de pedidos', config: 'Ajustes del sistema' };
+      document.querySelector('#headerTitle p').textContent = subtitles[btn.dataset.tab] || '';
+      if (window.innerWidth <= 768) {
+        document.getElementById('sidebar').classList.remove('sidebar--open');
+        document.getElementById('sidebarOverlay').classList.remove('sidebar-overlay--visible');
+      }
     });
   });
+}
+
+function bindModals() {
+  const orderModal = document.getElementById('orderModal');
+  document.getElementById('closeOrderModalBtn').addEventListener('click', () => orderModal.classList.remove('open'));
+  orderModal.addEventListener('click', (e) => { if (e.target === orderModal) orderModal.classList.remove('open'); });
+
+  const confirmModal = document.getElementById('confirmModal');
+  document.getElementById('confirmCancelBtn').addEventListener('click', () => {
+    confirmModal.classList.remove('open'); confirmCallback = null;
+  });
+  document.getElementById('confirmOkBtn').addEventListener('click', () => {
+    confirmModal.classList.remove('open');
+    if (confirmCallback) { confirmCallback(); confirmCallback = null; }
+  });
+  confirmModal.addEventListener('click', (e) => {
+    if (e.target === confirmModal) { confirmModal.classList.remove('open'); confirmCallback = null; }
+  });
+}
+
+function bindDashboard() {
+  renderDashboard();
+}
+
+function renderDashboard() {
+  const productos = obtenerProductos();
+  const activos = productos.filter(p => p.activo);
+  let pedidos = [];
+  try { pedidos = JSON.parse(localStorage.getItem('vertice-pedidos') || '[]'); } catch (e) {}
+  const pendientes = pedidos.filter(o => (o.estado || 'Pendiente') === 'Pendiente');
+  const ingresos = pedidos.filter(o => (o.estado || 'Pendiente') !== 'Cancelado').reduce((s, o) => s + (o.total || 0), 0);
+
+  document.getElementById('statProductos').textContent = productos.length;
+  document.getElementById('statActivos').textContent = activos.length;
+  document.getElementById('statPedidos').textContent = pedidos.length;
+  document.getElementById('statPendientes').textContent = pendientes.length;
+  document.getElementById('statIngresos').textContent = formatearPrecio(ingresos);
+  document.getElementById('productBadge').textContent = productos.length;
+  document.getElementById('orderBadge').textContent = pendientes.length;
+
+  const recentOrders = document.getElementById('dashboardRecentOrders');
+  if (pedidos.length === 0) {
+    recentOrders.innerHTML = '<p style="color:var(--text-muted);font-size:13px;">No hay pedidos recientes.</p>';
+  } else {
+    const last5 = pedidos.slice(-5).reverse();
+    recentOrders.innerHTML = last5.map(o => `
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--gray-100);font-size:13px;">
+        <span><strong>${esc(o.id)}</strong> · ${esc(o.nombre)}</span>
+        <span class="status-badge status-${(o.estado||'Pendiente').replace(/\s/g,'')}">${esc(o.estado||'Pendiente')}</span>
+      </div>
+    `).join('') + '<div style="margin-top:8px;"><button class="btn btn-sm btn-ghost" onclick="switchTab(\'pedidos\')">Ver todos →</button></div>';
+  }
+
+  const quickProducts = document.getElementById('dashboardQuickProducts');
+  if (productos.length === 0) {
+    quickProducts.innerHTML = '<p style="color:var(--text-muted);font-size:13px;">No hay productos.</p>';
+  } else {
+    quickProducts.innerHTML = productos.slice(0, 5).map(p => `
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--gray-100);font-size:13px;">
+        <span>${p.emoji || p.imagen || '🍸'} <strong>${esc(p.nombre)}</strong></span>
+        <span style="color:${p.activo ? 'var(--verde)' : 'var(--text-muted)'};font-weight:600;">${p.activo ? 'Activo' : 'Inactivo'}</span>
+      </div>
+    `).join('') + '<div style="margin-top:8px;"><button class="btn btn-sm btn-ghost" onclick="switchTab(\'productos\')">Ver todos →</button></div>';
+  }
+}
+
+function switchTab(tabName) {
+  const btn = document.querySelector(`.sidebar__link[data-tab="${tabName}"]`);
+  if (btn) btn.click();
 }
 
 function cargarProductos() {
   productosEditables = JSON.parse(JSON.stringify(obtenerProductos()));
   renderizarTablaProductos();
+  renderDashboard();
 }
 
 function renderizarTablaProductos() {
   const tbody = document.getElementById('productTableBody');
-  if (!productosEditables.length) {
-    tbody.innerHTML = '<tr><td colspan="7"><div class="empty-state"><p>No hay productos. Agregá el primero.</p></div></td></tr>';
+  const searchTerm = (document.getElementById('productSearch').value || '').toLowerCase();
+  let filtered = productosEditables;
+  if (searchTerm) {
+    filtered = productosEditables.filter(p =>
+      p.nombre.toLowerCase().includes(searchTerm) ||
+      p.categoria.toLowerCase().includes(searchTerm) ||
+      String(p.id).includes(searchTerm)
+    );
+  }
+  if (!filtered.length) {
+    tbody.innerHTML = `<tr><td colspan="7">
+      <div class="empty-state">
+        <div class="empty-state__icon">${searchTerm ? '🔍' : '📦'}</div>
+        <h3>${searchTerm ? 'Sin resultados' : 'No hay productos'}</h3>
+        <p>${searchTerm ? 'No encontramos productos con ese término.' : 'Agregá el primer producto para empezar.'}</p>
+      </div>
+    </td></tr>`;
     return;
   }
-  tbody.innerHTML = productosEditables.map(p => `
+  tbody.innerHTML = filtered.map(p => `
     <tr>
-      <td>${p.id}</td>
-      <td><strong>${esc(p.nombre)}</strong></td>
-      <td>${formatearPrecio(p.precio)}</td>
-      <td>${esc(p.categoria)}</td>
-      <td>${p.stock === -1 ? '∞' : p.stock}</td>
-      <td><span style="color:${p.activo ? 'var(--verde)' : '#B00020'};font-weight:600">${p.activo ? 'Sí' : 'No'}</span></td>
+      <td><span style="font-size:22px;">${p.emoji || p.imagen || '🍸'}</span></td>
       <td>
-        <button class="btn btn-sm btn-outline" onclick="editarProducto(${p.id})">Editar</button>
-        <button class="btn btn-sm ${p.activo ? 'btn-danger' : 'btn-success'}" onclick="toggleProducto(${p.id})">${p.activo ? 'Desact.' : 'Activar'}</button>
+        <div class="product-table-card__info">
+          <h4>${esc(p.nombre)}</h4>
+          ${p.subtitulo ? '<p>' + esc(p.subtitulo) + '</p>' : ''}
+        </div>
+      </td>
+      <td><strong>${formatearPrecio(p.precio)}</strong></td>
+      <td><span style="padding:3px 10px;background:var(--gray-100);border-radius:6px;font-size:11px;font-weight:500;">${esc(p.categoria)}</span></td>
+      <td>${p.stock === -1 ? '∞' : p.stock}</td>
+      <td>
+        <label class="toggle" onclick="event.stopPropagation()">
+          <input type="checkbox" ${p.activo ? 'checked' : ''} onchange="toggleProducto(${p.id})">
+          <span class="toggle__slider"></span>
+        </label>
+      </td>
+      <td>
+        <button class="btn btn-sm btn-ghost" onclick="editarProducto(${p.id})" title="Editar">✏️</button>
+        <button class="btn btn-sm ${p.activo ? 'btn-ghost' : 'btn-success'}" onclick="toggleProducto(${p.id})" title="${p.activo ? 'Desactivar' : 'Activar'}">
+          ${p.activo ? '⏸️' : '▶️'}
+        </button>
       </td>
     </tr>
   `).join('');
@@ -57,10 +176,15 @@ function editarProducto(id) {
   document.getElementById('prod-nombre').value = p.nombre || '';
   document.getElementById('prod-subtitulo').value = p.subtitulo || '';
   document.getElementById('prod-descripcion').value = p.descripcion || '';
+  document.getElementById('prod-descripcion_larga').value = p.descripcion_larga || '';
   document.getElementById('prod-precio').value = p.precio || '';
   document.getElementById('prod-categoria').value = p.categoria || '';
   document.getElementById('prod-stock').value = p.stock !== undefined ? p.stock : -1;
-  document.getElementById('prod-imagen').value = p.imagen || '🍸';
+  document.getElementById('prod-emoji').value = p.emoji || '🍸';
+  document.getElementById('prod-imagen_url').value = p.imagen_url || '';
+  document.getElementById('prod-especificaciones').value = (p.especificaciones || []).map(e => `${e.label}: ${e.value}`).join('\n');
+  renderBotanicosList(p.botanicos || []);
+  renderProcesoStepsList(p.proceso_steps || []);
   document.getElementById('productModal').classList.add('open');
 }
 
@@ -70,36 +194,57 @@ function toggleProducto(id) {
   p.activo = !p.activo;
   guardarProductos(productosEditables);
   renderizarTablaProductos();
-  showToast(p.activo ? 'Producto activado' : 'Producto desactivado');
+  renderDashboard();
+  showToast(p.activo ? 'Producto activado' : 'Producto desactivado', 'success');
 }
 
 function bindProductModal() {
+  const modal = document.getElementById('productModal');
+  const closeModal = () => modal.classList.remove('open');
+
   document.getElementById('addProductBtn').addEventListener('click', () => {
     document.getElementById('productModalTitle').textContent = 'Agregar Producto';
     document.getElementById('editProductId').value = '';
-    ['prod-nombre','prod-subtitulo','prod-descripcion','prod-precio','prod-categoria','prod-imagen'].forEach(id => document.getElementById(id).value = '');
+    ['prod-nombre','prod-subtitulo','prod-descripcion','prod-descripcion_larga','prod-precio','prod-categoria','prod-emoji','prod-imagen_url','prod-especificaciones'].forEach(id => document.getElementById(id).value = '');
     document.getElementById('prod-stock').value = '-1';
-    document.getElementById('prod-imagen').value = '🍸';
-    document.getElementById('productModal').classList.add('open');
+    document.getElementById('prod-emoji').value = '🍸';
+    renderBotanicosList([]);
+    renderProcesoStepsList([]);
+    modal.classList.add('open');
   });
 
-  document.getElementById('cancelProductBtn').addEventListener('click', () => {
-    document.getElementById('productModal').classList.remove('open');
-  });
+  document.getElementById('cancelProductBtn').addEventListener('click', closeModal);
+  document.getElementById('closeProductModalBtn').addEventListener('click', closeModal);
+  modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
 
   document.getElementById('saveProductBtn').addEventListener('click', () => {
+    const botanicos = getBotanicosFromForm();
+    const proceso_steps = getProcesoStepsFromForm();
+
+    const specsRaw = document.getElementById('prod-especificaciones').value.trim();
+    const especificaciones = specsRaw ? specsRaw.split('\n').map(line => {
+      const sep = line.indexOf(':');
+      if (sep < 1) return null;
+      return { label: line.slice(0, sep).trim(), value: line.slice(sep + 1).trim() };
+    }).filter(Boolean) : [];
+
     const data = {
       nombre: document.getElementById('prod-nombre').value.trim(),
       subtitulo: document.getElementById('prod-subtitulo').value.trim(),
       descripcion: document.getElementById('prod-descripcion').value.trim(),
+      descripcion_larga: document.getElementById('prod-descripcion_larga').value.trim(),
       precio: Number(document.getElementById('prod-precio').value) || 0,
       categoria: document.getElementById('prod-categoria').value.trim(),
       stock: Number(document.getElementById('prod-stock').value) || -1,
-      imagen: document.getElementById('prod-imagen').value.trim() || '🍸',
+      emoji: document.getElementById('prod-emoji').value.trim() || '🍸',
+      imagen_url: document.getElementById('prod-imagen_url').value.trim() || '',
+      especificaciones,
+      botanicos,
+      proceso_steps,
       activo: true,
     };
-    if (!data.nombre) { showToast('El nombre es obligatorio'); return; }
-    if (data.precio <= 0) { showToast('El precio debe ser mayor a 0'); return; }
+    if (!data.nombre) { showToast('El nombre es obligatorio', 'error'); return; }
+    if (data.precio <= 0) { showToast('El precio debe ser mayor a 0', 'error'); return; }
 
     const editId = document.getElementById('editProductId').value;
     if (editId) {
@@ -113,9 +258,10 @@ function bindProductModal() {
     }
 
     guardarProductos(productosEditables);
-    document.getElementById('productModal').classList.remove('open');
+    closeModal();
     renderizarTablaProductos();
-    showToast(editId ? 'Producto actualizado' : 'Producto agregado');
+    renderDashboard();
+    showToast(editId ? 'Producto actualizado' : 'Producto agregado', 'success');
   });
 }
 
@@ -124,11 +270,9 @@ function bindJsonActions() {
     const blob = new Blob([JSON.stringify(productosEditables, null, 2)], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
-    a.href = url;
-    a.download = 'vertice-productos.json';
-    a.click();
+    a.href = url; a.download = 'vertice-productos.json'; a.click();
     URL.revokeObjectURL(url);
-    showToast('JSON exportado');
+    showToast('JSON exportado', 'success');
   });
 
   document.getElementById('importJsonBtn').addEventListener('click', () => {
@@ -146,13 +290,76 @@ function bindJsonActions() {
         productosEditables = data;
         guardarProductos(productosEditables);
         renderizarTablaProductos();
-        showToast('Productos importados correctamente');
+        renderDashboard();
+        showToast('Productos importados correctamente', 'success');
       } catch (err) {
-        showToast('Error al importar: ' + err.message);
+        showToast('Error al importar: ' + err.message, 'error');
       }
     };
     reader.readAsText(file);
     e.target.value = '';
+  });
+
+  document.getElementById('exportAllBtn').addEventListener('click', () => {
+    const data = {
+      productos: productosEditables,
+      config: (() => { try { return JSON.parse(localStorage.getItem('vertice-admin-config') || '{}'); } catch(e) { return {}; } })(),
+      pedidos: (() => { try { return JSON.parse(localStorage.getItem('vertice-pedidos') || '[]'); } catch(e) { return []; } })(),
+      exportDate: new Date().toISOString(),
+    };
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = 'vertice-backup.json'; a.click();
+    URL.revokeObjectURL(url);
+    showToast('Backup exportado', 'success');
+  });
+
+  document.getElementById('importAllBtn').addEventListener('click', () => {
+    document.getElementById('importAllInput').click();
+  });
+
+  document.getElementById('importAllInput').addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      try {
+        const data = JSON.parse(ev.target.result);
+        if (data.productos && Array.isArray(data.productos)) {
+          productosEditables = data.productos;
+          guardarProductos(productosEditables);
+        }
+        if (data.pedidos && Array.isArray(data.pedidos)) {
+          localStorage.setItem('vertice-pedidos', JSON.stringify(data.pedidos));
+        }
+        if (data.config && typeof data.config === 'object') {
+          localStorage.setItem('vertice-admin-config', JSON.stringify(data.config));
+        }
+        cargarProductos();
+        cargarPedidos();
+        cargarConfig();
+        renderDashboard();
+        showToast('Datos importados correctamente', 'success');
+      } catch (err) {
+        showToast('Error al importar: ' + err.message, 'error');
+      }
+    };
+    reader.readAsText(file);
+    e.target.value = '';
+  });
+
+  document.getElementById('resetAllBtn').addEventListener('click', () => {
+    showConfirm('🗑️ Resetear datos', '¿Estás seguro? Se borrarán todos los productos, pedidos y configuración. Esta acción no se puede deshacer.', () => {
+      localStorage.removeItem('vertice-productos');
+      localStorage.removeItem('vertice-pedidos');
+      localStorage.removeItem('vertice-admin-config');
+      cargarProductos();
+      cargarPedidos();
+      cargarConfig();
+      renderDashboard();
+      showToast('Datos reseteados', 'info');
+    });
   });
 }
 
@@ -161,29 +368,52 @@ function cargarPedidos() {
   let pedidos = [];
   try { pedidos = JSON.parse(localStorage.getItem('vertice-pedidos') || '[]'); } catch (e) {}
 
-  if (!pedidos.length) {
-    tbody.innerHTML = '<tr><td colspan="8"><div class="empty-state"><p>No hay pedidos todavía.</p></div></td></tr>';
+  const searchTerm = (document.getElementById('orderSearch').value || '').toLowerCase();
+  const statusFilter = document.getElementById('orderStatusFilter').value;
+
+  let filtered = pedidos;
+  if (searchTerm) {
+    filtered = filtered.filter(o =>
+      (o.id || '').toLowerCase().includes(searchTerm) ||
+      (o.nombre || '').toLowerCase().includes(searchTerm) ||
+      (o.telefono || '').toLowerCase().includes(searchTerm)
+    );
+  }
+  if (statusFilter) {
+    filtered = filtered.filter(o => (o.estado || 'Pendiente') === statusFilter);
+  }
+
+  if (!filtered.length) {
+    tbody.innerHTML = `<tr><td colspan="8">
+      <div class="empty-state">
+        <div class="empty-state__icon">${searchTerm || statusFilter ? '🔍' : '📦'}</div>
+        <h3>${searchTerm || statusFilter ? 'Sin resultados' : 'No hay pedidos'}</h3>
+        <p>${searchTerm || statusFilter ? 'No hay pedidos con esos filtros.' : 'Los pedidos aparecerán aquí cuando los clientes los realicen.'}</p>
+      </div>
+    </td></tr>`;
+    renderDashboard();
     return;
   }
 
-  tbody.innerHTML = pedidos.map((o, idx) => {
+  tbody.innerHTML = filtered.map((o, idx) => {
+    const origIdx = pedidos.indexOf(o);
     const items = o.productos || [];
     const itemsStr = items.map(i => `${i.cantidad}× ${i.nombre}`).join(', ');
     const estado = o.estado || 'Pendiente';
     const estadoClass = estado.replace(/\s/g, '');
 
     return `<tr>
-      <td><strong>${esc(o.id)}</strong></td>
-      <td>${esc(o.fecha)}</td>
-      <td>${esc(o.nombre)}</td>
-      <td>${esc(o.telefono)}</td>
-      <td style="max-width:180px;font-size:11px;">${esc(itemsStr.length > 80 ? itemsStr.slice(0,77)+'...' : itemsStr)}</td>
-      <td><strong>${formatearPrecio(o.total)}</strong></td>
+      <td><strong style="font-family:var(--font-heading)">#${esc(o.id)}</strong></td>
+      <td style="font-size:12px;color:var(--text-muted);white-space:nowrap;">${esc(o.fecha)}</td>
+      <td><strong>${esc(o.nombre)}</strong></td>
+      <td style="font-size:12px;"><a href="https://wa.me/${esc(o.telefono)}" target="_blank" style="color:inherit;text-decoration:underline;text-underline-offset:2px;">${esc(o.telefono)}</a></td>
+      <td style="max-width:160px;font-size:12px;color:var(--text-secondary);">${esc(itemsStr.length > 70 ? itemsStr.slice(0,67)+'…' : itemsStr)}</td>
+      <td><strong style="color:var(--cobre);">${formatearPrecio(o.total)}</strong></td>
       <td><span class="status-badge status-${estadoClass}">${esc(estado)}</span></td>
       <td>
-        <button class="btn btn-sm btn-outline" onclick="verPedido(${idx})">Ver</button>
-        <select onchange="cambiarEstadoPedido(${idx}, this.value)" style="padding:4px 6px;border-radius:6px;border:1px solid rgba(0,0,0,0.08);font-size:11px;font-family:var(--font-body)">
-          <option value="">Estado</option>
+        <button class="btn btn-sm btn-ghost" onclick="verPedido(${origIdx})" title="Ver detalle">👁️</button>
+        <select class="status-select" onchange="cambiarEstadoPedido(${origIdx}, this.value)">
+          <option value="">Cambiar</option>
           <option value="Pendiente">Pendiente</option>
           <option value="Confirmado">Confirmado</option>
           <option value="En Preparacion">En Preparación</option>
@@ -194,6 +424,7 @@ function cargarPedidos() {
       </td>
     </tr>`;
   }).join('');
+  renderDashboard();
 }
 
 function verPedido(idx) {
@@ -202,31 +433,33 @@ function verPedido(idx) {
   const o = pedidos[idx];
   if (!o) return;
 
-  const items = o.productos || [];
-  const itemsHtml = items.map(i =>
-    `<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid rgba(0,0,0,0.04)">
-      <span>${esc(i.nombre)} × ${i.cantidad}</span>
-      <span style="font-weight:600">${formatearPrecio(i.subtotal)}</span>
-    </div>`
-  ).join('');
-
   document.getElementById('orderDetailContent').innerHTML = `
-    <div style="margin-bottom:16px">
-      <p><strong>Pedido:</strong> ${esc(o.id)}</p>
-      <p><strong>Fecha:</strong> ${esc(o.fecha)}</p>
-      <p><strong>Estado:</strong> <span class="status-badge status-${(o.estado||'Pendiente').replace(/\s/g,'')}">${esc(o.estado||'Pendiente')}</span></p>
-    </div>
-    <div style="margin-bottom:16px">
-      <p><strong>Cliente:</strong> ${esc(o.nombre)}</p>
-      <p><strong>Teléfono:</strong> ${esc(o.telefono)}</p>
-      <p><strong>Dirección:</strong> ${esc(o.direccion)}</p>
-      ${o.notas ? '<p><strong>Notas:</strong> '+esc(o.notas)+'</p>' : ''}
-    </div>
-    <div>
-      <p style="font-weight:600;margin-bottom:6px;font-size:13px;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-muted)">Productos</p>
-      ${itemsHtml}
-      <div style="display:flex;justify-content:space-between;padding:8px 0 0;margin-top:4px;border-top:2px solid var(--carbon);font-size:15px;font-weight:700">
-        <span>Total</span><span style="color:var(--cobre)">${formatearPrecio(o.total)}</span>
+    <div class="order-detail-grid">
+      <div class="order-detail-section">
+        <h4>Información del pedido</h4>
+        <p><strong>ID:</strong> #${esc(o.id)}</p>
+        <p><strong>Fecha:</strong> ${esc(o.fecha)}</p>
+        <p><strong>Estado:</strong> <span class="status-badge status-${(o.estado||'Pendiente').replace(/\s/g,'')}">${esc(o.estado||'Pendiente')}</span></p>
+      </div>
+      <div class="order-detail-section">
+        <h4>Cliente</h4>
+        <p><strong>Nombre:</strong> ${esc(o.nombre)}</p>
+        <p><strong>Teléfono:</strong> <a href="https://wa.me/${esc(o.telefono)}" target="_blank" style="color:var(--cobre);">${esc(o.telefono)}</a></p>
+        <p><strong>Dirección:</strong> ${esc(o.direccion)}</p>
+        ${o.notas ? '<p><strong>Notas:</strong> ' + esc(o.notas) + '</p>' : ''}
+      </div>
+      <div class="order-detail-section">
+        <h4>Productos</h4>
+        ${(o.productos || []).map(i => `
+          <div class="order-item-row">
+            <span>${esc(i.nombre)} × ${i.cantidad}</span>
+            <span style="font-weight:600;">${formatearPrecio(i.subtotal)}</span>
+          </div>
+        `).join('')}
+        <div style="display:flex;justify-content:space-between;padding:10px 0 0;margin-top:8px;border-top:2px solid var(--carbon);font-size:16px;font-weight:700;">
+          <span>Total</span>
+          <span style="color:var(--cobre)">${formatearPrecio(o.total)}</span>
+        </div>
       </div>
     </div>
   `;
@@ -241,13 +474,9 @@ function cambiarEstadoPedido(idx, estado) {
     pedidos[idx].estado = estado;
     localStorage.setItem('vertice-pedidos', JSON.stringify(pedidos));
     cargarPedidos();
-    showToast('Estado actualizado');
+    showToast('Estado actualizado a ' + estado, 'success');
   }
 }
-
-document.getElementById('closeOrderModal').addEventListener('click', () => {
-  document.getElementById('orderModal').classList.remove('open');
-});
 
 function cargarConfig() {
   try {
@@ -264,8 +493,30 @@ function bindConfig() {
       delivery: document.getElementById('cfg-delivery').value.trim(),
     };
     localStorage.setItem('vertice-admin-config', JSON.stringify(cfg));
-    showToast('Configuración guardada');
+    showToast('Configuración guardada', 'success');
   });
+}
+
+function showConfirm(title, message, onConfirm) {
+  document.getElementById('confirmIcon').textContent = '⚠️';
+  document.getElementById('confirmTitle').textContent = title;
+  document.getElementById('confirmMessage').textContent = message;
+  confirmCallback = onConfirm;
+  document.getElementById('confirmModal').classList.add('open');
+}
+
+function showToast(msg, type) {
+  type = type || 'info';
+  const container = document.getElementById('toastContainer');
+  const toast = document.createElement('div');
+  toast.className = 'toast toast--' + type;
+  const icons = { success: '✅', error: '❌', info: 'ℹ️' };
+  toast.innerHTML = '<span>' + (icons[type] || 'ℹ️') + '</span>' + esc(msg);
+  container.appendChild(toast);
+  setTimeout(() => {
+    toast.classList.add('toast--remove');
+    setTimeout(() => toast.remove(), 300);
+  }, 3000);
 }
 
 function esc(str) {
@@ -273,10 +524,87 @@ function esc(str) {
   return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 
-function showToast(msg) {
-  const el = document.getElementById('toast');
-  el.textContent = msg;
-  el.classList.add('show');
-  clearTimeout(window._toastTimer);
-  window._toastTimer = setTimeout(() => el.classList.remove('show'), 2500);
+function renderBotanicosList(data) {
+  const c = document.getElementById('botanicos-container');
+  c.innerHTML = '';
+  (data || []).forEach((b, i) => c.appendChild(crearBotanicoItem(b, i)));
+}
+
+function renderProcesoStepsList(data) {
+  const c = document.getElementById('proceso-steps-container');
+  c.innerHTML = '';
+  (data || []).forEach((s, i) => c.appendChild(crearProcesoStepItem(s, i)));
+}
+
+function crearBotanicoItem(b, i) {
+  const div = document.createElement('div');
+  div.className = 'dynamic-item';
+  div.innerHTML = `
+    <button class="btn btn-xs btn-danger remove-item-btn" onclick="removeBotanico(${i})">✕</button>
+    <div class="dynamic-item__row">
+      <input class="botanico-icono" value="${esc(b.icono||'')}" placeholder="🌲" maxlength="6" style="width:50px">
+      <input class="botanico-nombre" value="${esc(b.nombre||'')}" placeholder="Nombre del botánico">
+    </div>
+    <textarea class="botanico-descripcion" rows="2" placeholder="Descripción del aporte...">${esc(b.descripcion||'')}</textarea>
+    <label class="dynamic-item__checkbox">
+      <input type="checkbox" class="botanico-local" ${b.local ? 'checked' : ''}>
+      <span>Local (de Pasteur)</span>
+    </label>`;
+  return div;
+}
+
+function crearProcesoStepItem(s, i) {
+  const div = document.createElement('div');
+  div.className = 'dynamic-item';
+  div.innerHTML = `
+    <button class="btn btn-xs btn-danger remove-item-btn" onclick="removeProcesoStep(${i})">✕</button>
+    <div class="dynamic-item__row">
+      <input class="step-numero" type="number" value="${s.numero||''}" placeholder="1" min="1" style="width:60px">
+      <input class="step-titulo" value="${esc(s.titulo||'')}" placeholder="Título del paso">
+    </div>
+    <textarea class="step-descripcion" rows="2" placeholder="Descripción del paso...">${esc(s.descripcion||'')}</textarea>`;
+  return div;
+}
+
+function addBotanico() {
+  const c = document.getElementById('botanicos-container');
+  const i = c.children.length;
+  c.appendChild(crearBotanicoItem({}, i));
+}
+
+function addProcesoStep() {
+  const c = document.getElementById('proceso-steps-container');
+  const i = c.children.length;
+  c.appendChild(crearProcesoStepItem({}, i));
+}
+
+function removeBotanico(index) {
+  const items = getBotanicosFromForm();
+  items.splice(index, 1);
+  renderBotanicosList(items);
+}
+
+function removeProcesoStep(index) {
+  const items = getProcesoStepsFromForm();
+  items.splice(index, 1);
+  renderProcesoStepsList(items);
+}
+
+function getBotanicosFromForm() {
+  const container = document.getElementById('botanicos-container');
+  return Array.from(container.querySelectorAll('.dynamic-item')).map(el => ({
+    icono: el.querySelector('.botanico-icono').value.trim(),
+    nombre: el.querySelector('.botanico-nombre').value.trim(),
+    descripcion: el.querySelector('.botanico-descripcion').value.trim(),
+    local: el.querySelector('.botanico-local') ? el.querySelector('.botanico-local').checked : false,
+  })).filter(b => b.nombre || b.icono);
+}
+
+function getProcesoStepsFromForm() {
+  const container = document.getElementById('proceso-steps-container');
+  return Array.from(container.querySelectorAll('.dynamic-item')).map(el => ({
+    numero: Number(el.querySelector('.step-numero').value) || (Array.from(el.parentNode.children).indexOf(el) + 1),
+    titulo: el.querySelector('.step-titulo').value.trim(),
+    descripcion: el.querySelector('.step-descripcion').value.trim(),
+  })).filter(s => s.titulo);
 }
