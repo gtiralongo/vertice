@@ -1,18 +1,48 @@
 let productosEditables = [];
 let confirmCallback = null;
-let orderStatuses = JSON.parse(localStorage.getItem('vertice-order-statuses') || 'null') || ['Pendiente', 'Confirmado', 'En Preparacion', 'Enviado', 'Entregado', 'Cancelado'];
+// Default statuses with colors matching the CSS badge classes
+const DEFAULT_STATUSES = [
+  { name: 'Pendiente', color: '#F59E0B' },
+  { name: 'Confirmado', color: '#3B82F6' },
+  { name: 'En Preparacion', color: '#6366F1' },
+  { name: 'Enviado', color: '#10B981' },
+  { name: 'Entregado', color: '#059669' },
+  { name: 'Cancelado', color: '#EF4444' },
+];
+
+let orderStatuses = JSON.parse(localStorage.getItem('vertice-order-statuses') || 'null') || DEFAULT_STATUSES;
 
 function persistOrderStatuses() {
   localStorage.setItem('vertice-order-statuses', JSON.stringify(orderStatuses));
+}
+
+function getStatusName(s) {
+  return typeof s === 'string' ? s : s.name;
+}
+
+function getStatusColor(s) {
+  if (typeof s === 'string') {
+    // Return default color for built-in statuses
+    const def = DEFAULT_STATUSES.find(d => d.name === s);
+    return def ? def.color : '#6B7280';
+  }
+  return s.color || '#6B7280';
+}
+
+function getStatusClass(s) {
+  const name = getStatusName(s);
+  return name.replace(/\s/g, '');
 }
 
 function renderOrderStatuses() {
   const c = document.getElementById('orderStatusesContainer');
   if (!c) return;
   c.innerHTML = orderStatuses.map((s, i) => {
-    const cls = s.replace(/\s/g, '');
+    const cls = getStatusClass(s);
+    const color = getStatusColor(s);
     return '<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">' +
-      '<span class="status-badge status-' + esc(cls) + '">' + esc(s) + '</span>' +
+      '<span class="status-badge status-' + esc(cls) + '" style="background:' + color + '22;color:' + color + ';border-color:' + color + '55;">' +
+      '<span style="background:' + color + ';">&nbsp;</span>' + esc(getStatusName(s)) + '</span>' +
       '<button class="btn btn-xs btn-ghost" onclick="editOrderStatus(' + i + ')" title="Editar">✏️</button>' +
       '<button class="btn btn-xs btn-danger" onclick="removeOrderStatus(' + i + ')" title="Eliminar">✕</button>' +
       '</div>';
@@ -22,8 +52,10 @@ function renderOrderStatuses() {
 function addOrderStatus() {
   const name = prompt('Nombre del nuevo estado:');
   if (!name || !name.trim()) return;
-  if (orderStatuses.includes(name.trim())) { showToast('Ese estado ya existe', 'error'); return; }
-  orderStatuses.push(name.trim());
+  if (orderStatuses.some(s => getStatusName(s) === name.trim())) { showToast('Ese estado ya existe', 'error'); return; }
+  const color = prompt('Color (hex, ej: #FF6600):', '#6B7280');
+  if (!color || !color.trim()) return;
+  orderStatuses.push({ name: name.trim(), color: color.trim() });
   persistOrderStatuses();
   renderOrderStatuses();
   refreshStatusDropdowns();
@@ -31,8 +63,9 @@ function addOrderStatus() {
 }
 
 function removeOrderStatus(idx) {
-  const name = orderStatuses[idx];
-  if (!name) return;
+  const s = orderStatuses[idx];
+  if (!s) return;
+  const name = getStatusName(s);
   showConfirm('🗑️ Eliminar estado', '¿Eliminás el estado "' + name + '"? Los pedidos que lo usen lo conservarán pero ya no aparecerá como opción.', () => {
     orderStatuses.splice(idx, 1);
     persistOrderStatuses();
@@ -43,18 +76,23 @@ function removeOrderStatus(idx) {
 }
 
 function editOrderStatus(idx) {
-  const old = orderStatuses[idx];
-  const val = prompt('Nuevo nombre:', old);
-  if (!val || !val.trim() || val.trim() === old) return;
-  if (orderStatuses.includes(val.trim())) { showToast('Ese estado ya existe', 'error'); return; }
+  const s = orderStatuses[idx];
+  if (!s) return;
+  const oldName = getStatusName(s);
+  const oldColor = getStatusColor(s);
+  const val = prompt('Nuevo nombre:', oldName);
+  if (!val || !val.trim() || val.trim() === oldName) return;
+  if (orderStatuses.some((s2, i2) => i2 !== idx && getStatusName(s2) === val.trim())) { showToast('Ese estado ya existe', 'error'); return; }
+  const color = prompt('Color (hex, ej: #FF6600):', oldColor);
+  if (!color || !color.trim()) return;
   let pedidos = [];
   try { pedidos = JSON.parse(localStorage.getItem('vertice-pedidos') || '[]'); } catch (e) {}
-  const renamed = pedidos.filter(o => (o.estado || 'Pendiente') === old);
+  const renamed = pedidos.filter(o => (o.estado || 'Pendiente') === oldName);
   if (renamed.length) {
-    showConfirm('✏️ Renombrar estado', 'Hay ' + renamed.length + ' pedido(s) con estado "' + old + '". ¿Les cambiamos el estado a "' + val.trim() + '"?', () => {
-      pedidos.forEach(o => { if ((o.estado || 'Pendiente') === old) o.estado = val.trim(); });
+    showConfirm('✏️ Renombrar estado', 'Hay ' + renamed.length + ' pedido(s) con estado "' + oldName + '". ¿Les cambiamos el estado a "' + val.trim() + '"?', () => {
+      pedidos.forEach(o => { if ((o.estado || 'Pendiente') === oldName) o.estado = val.trim(); });
       localStorage.setItem('vertice-pedidos', JSON.stringify(pedidos));
-      orderStatuses[idx] = val.trim();
+      orderStatuses[idx] = { name: val.trim(), color: color.trim() };
       persistOrderStatuses();
       renderOrderStatuses();
       refreshStatusDropdowns();
@@ -62,7 +100,7 @@ function editOrderStatus(idx) {
       showToast('Estado renombrado a: ' + val.trim(), 'success');
     });
   } else {
-    orderStatuses[idx] = val.trim();
+    orderStatuses[idx] = { name: val.trim(), color: color.trim() };
     persistOrderStatuses();
     renderOrderStatuses();
     refreshStatusDropdowns();
@@ -75,7 +113,7 @@ function refreshStatusDropdowns() {
   if (filterSel) {
     const cur = filterSel.value;
     filterSel.innerHTML = '<option value="">Todos los estados</option>' +
-      orderStatuses.map(s => '<option value="' + esc(s) + '">' + esc(s) + '</option>').join('');
+      orderStatuses.map(s => '<option value="' + esc(getStatusName(s)) + '">' + esc(getStatusName(s)) + '</option>').join('');
     filterSel.value = cur;
   }
 }
@@ -166,12 +204,17 @@ function renderDashboard() {
     recentOrders.innerHTML = '<p style="color:var(--text-muted);font-size:13px;">No hay pedidos recientes.</p>';
   } else {
     const last5 = pedidos.slice(-5).reverse();
-    recentOrders.innerHTML = last5.map(o => `
+    recentOrders.innerHTML = last5.map(o => {
+      const estado = o.estado || 'Pendiente';
+      const statusObj = orderStatuses.find(s => getStatusName(s) === estado);
+      const statusColor = statusObj ? getStatusColor(statusObj) : null;
+      const badgeStyle = statusColor ? `style="background:${statusColor}22;color:${statusColor};border-color:${statusColor}55;"` : '';
+      return `
       <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--gray-100);font-size:13px;">
         <span><strong>${esc(o.id)}</strong> · ${esc(o.nombre)}</span>
-        <span class="status-badge status-${(o.estado||'Pendiente').replace(/\s/g,'')}">${esc(o.estado||'Pendiente')}</span>
-      </div>
-    `).join('') + '<div style="margin-top:8px;"><button class="btn btn-sm btn-ghost" onclick="switchTab(\'pedidos\')">Ver todos →</button></div>';
+        <span class="status-badge status-${estado.replace(/\s/g,'')}" ${badgeStyle}>${esc(estado)}</span>
+      </div>`;
+    }).join('') + '<div style="margin-top:8px;"><button class="btn btn-sm btn-ghost" onclick="switchTab(\'pedidos\')">Ver todos →</button></div>';
   }
 
   const quickProducts = document.getElementById('dashboardQuickProducts');
@@ -439,7 +482,7 @@ function bindJsonActions() {
       localStorage.removeItem('vertice-pedidos');
       localStorage.removeItem('vertice-admin-config');
       localStorage.removeItem('vertice-order-statuses');
-      orderStatuses = ['Pendiente', 'Confirmado', 'En Preparacion', 'Enviado', 'Entregado', 'Cancelado'];
+      orderStatuses = JSON.parse(JSON.stringify(DEFAULT_STATUSES));
       cargarProductos();
       cargarPedidos();
       cargarConfig();
@@ -487,6 +530,9 @@ function cargarPedidos() {
     const itemsStr = items.map(i => `${i.cantidad}× ${i.nombre}`).join(', ');
     const estado = o.estado || 'Pendiente';
     const estadoClass = estado.replace(/\s/g, '');
+    const statusObj = orderStatuses.find(s => getStatusName(s) === estado);
+    const statusColor = statusObj ? getStatusColor(statusObj) : null;
+    const badgeStyle = statusColor ? `style="background:${statusColor}22;color:${statusColor};border-color:${statusColor}55;"` : '';
 
     return `<tr>
       <td><strong style="font-family:var(--font-heading)">#${esc(o.id)}</strong></td>
@@ -495,12 +541,12 @@ function cargarPedidos() {
       <td style="font-size:12px;"><a href="https://wa.me/${esc(o.telefono)}" target="_blank" style="color:inherit;text-decoration:underline;text-underline-offset:2px;">${esc(o.telefono)}</a></td>
       <td style="max-width:160px;font-size:12px;color:var(--text-secondary);">${esc(itemsStr.length > 70 ? itemsStr.slice(0,67)+'…' : itemsStr)}</td>
       <td><strong style="color:var(--cobre);">${formatearPrecio(o.total)}</strong></td>
-      <td><span class="status-badge status-${estadoClass}">${esc(estado)}</span></td>
+      <td><span class="status-badge status-${estadoClass}" ${badgeStyle}>${esc(estado)}</span></td>
       <td>
         <button class="btn btn-sm btn-ghost" onclick="verPedido(${origIdx})" title="Ver detalle">👁️</button>
         <select class="status-select" onchange="cambiarEstadoPedido(${origIdx}, this.value)">
           <option value="">Cambiar</option>
-          ${orderStatuses.map(s => '<option value="' + esc(s) + '"' + (estado === s ? ' selected' : '') + '>' + esc(s) + '</option>').join('')}
+          ${orderStatuses.map(s => '<option value="' + esc(getStatusName(s)) + '"' + (estado === getStatusName(s) ? ' selected' : '') + '>' + esc(getStatusName(s)) + '</option>').join('')}
         </select>
       </td>
     </tr>`;
@@ -514,13 +560,18 @@ function verPedido(idx) {
   const o = pedidos[idx];
   if (!o) return;
 
+  const estado = o.estado || 'Pendiente';
+  const statusObj = orderStatuses.find(s => getStatusName(s) === estado);
+  const statusColor = statusObj ? getStatusColor(statusObj) : null;
+  const badgeStyle = statusColor ? `style="background:${statusColor}22;color:${statusColor};border-color:${statusColor}55;"` : '';
+
   document.getElementById('orderDetailContent').innerHTML = `
     <div class="order-detail-grid">
       <div class="order-detail-section">
         <h4>Información del pedido</h4>
         <p><strong>ID:</strong> #${esc(o.id)}</p>
         <p><strong>Fecha:</strong> ${esc(o.fecha)}</p>
-        <p><strong>Estado:</strong> <span class="status-badge status-${(o.estado||'Pendiente').replace(/\s/g,'')}">${esc(o.estado||'Pendiente')}</span></p>
+        <p><strong>Estado:</strong> <span class="status-badge status-${estado.replace(/\s/g,'')}" ${badgeStyle}>${esc(estado)}</span></p>
       </div>
       <div class="order-detail-section">
         <h4>Cliente</h4>
