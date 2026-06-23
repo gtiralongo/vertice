@@ -190,12 +190,6 @@
             </div>
             <select id="orderStatusFilter" onchange="cargarPedidos()" style="padding:9px 14px;border:1.5px solid var(--gray-200);border-radius:var(--radius-sm);font-family:var(--font-body);font-size:13px;outline:none;cursor:pointer;">
               <option value="">Todos los estados</option>
-              <option value="Pendiente">Pendiente</option>
-              <option value="Confirmado">Confirmado</option>
-              <option value="En Preparacion">En Preparación</option>
-              <option value="Enviado">Enviado</option>
-              <option value="Entregado">Entregado</option>
-              <option value="Cancelado">Cancelado</option>
             </select>
           </div>
         </div>
@@ -241,6 +235,12 @@
               <textarea id="cfg-delivery" rows="3" placeholder="Ej: Envíos a todo el país. Consultá por tu zona."></textarea>
             </div>
           </div>
+        </div>
+        <div class="config-section">
+          <h3>📋 Estados de pedido</h3>
+          <p class="config-desc">Definí los estados disponibles para los pedidos. El orden define el flujo.</p>
+          <div id="orderStatusesContainer"></div>
+          <button class="btn btn-sm btn-ghost" onclick="addOrderStatus()" style="margin-top:8px;">+ Agregar estado</button>
         </div>
         <div class="config-section">
           <h3>💾 Datos</h3>

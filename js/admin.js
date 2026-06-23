@@ -1,5 +1,84 @@
 let productosEditables = [];
 let confirmCallback = null;
+let orderStatuses = JSON.parse(localStorage.getItem('vertice-order-statuses') || 'null') || ['Pendiente', 'Confirmado', 'En Preparacion', 'Enviado', 'Entregado', 'Cancelado'];
+
+function persistOrderStatuses() {
+  localStorage.setItem('vertice-order-statuses', JSON.stringify(orderStatuses));
+}
+
+function renderOrderStatuses() {
+  const c = document.getElementById('orderStatusesContainer');
+  if (!c) return;
+  c.innerHTML = orderStatuses.map((s, i) => {
+    const cls = s.replace(/\s/g, '');
+    return '<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">' +
+      '<span class="status-badge status-' + esc(cls) + '">' + esc(s) + '</span>' +
+      '<button class="btn btn-xs btn-ghost" onclick="editOrderStatus(' + i + ')" title="Editar">✏️</button>' +
+      '<button class="btn btn-xs btn-danger" onclick="removeOrderStatus(' + i + ')" title="Eliminar">✕</button>' +
+      '</div>';
+  }).join('');
+}
+
+function addOrderStatus() {
+  const name = prompt('Nombre del nuevo estado:');
+  if (!name || !name.trim()) return;
+  if (orderStatuses.includes(name.trim())) { showToast('Ese estado ya existe', 'error'); return; }
+  orderStatuses.push(name.trim());
+  persistOrderStatuses();
+  renderOrderStatuses();
+  refreshStatusDropdowns();
+  showToast('Estado agregado: ' + name.trim(), 'success');
+}
+
+function removeOrderStatus(idx) {
+  const name = orderStatuses[idx];
+  if (!name) return;
+  showConfirm('🗑️ Eliminar estado', '¿Eliminás el estado "' + name + '"? Los pedidos que lo usen lo conservarán pero ya no aparecerá como opción.', () => {
+    orderStatuses.splice(idx, 1);
+    persistOrderStatuses();
+    renderOrderStatuses();
+    refreshStatusDropdowns();
+    showToast('Estado eliminado: ' + name, 'info');
+  });
+}
+
+function editOrderStatus(idx) {
+  const old = orderStatuses[idx];
+  const val = prompt('Nuevo nombre:', old);
+  if (!val || !val.trim() || val.trim() === old) return;
+  if (orderStatuses.includes(val.trim())) { showToast('Ese estado ya existe', 'error'); return; }
+  let pedidos = [];
+  try { pedidos = JSON.parse(localStorage.getItem('vertice-pedidos') || '[]'); } catch (e) {}
+  const renamed = pedidos.filter(o => (o.estado || 'Pendiente') === old);
+  if (renamed.length) {
+    showConfirm('✏️ Renombrar estado', 'Hay ' + renamed.length + ' pedido(s) con estado "' + old + '". ¿Les cambiamos el estado a "' + val.trim() + '"?', () => {
+      pedidos.forEach(o => { if ((o.estado || 'Pendiente') === old) o.estado = val.trim(); });
+      localStorage.setItem('vertice-pedidos', JSON.stringify(pedidos));
+      orderStatuses[idx] = val.trim();
+      persistOrderStatuses();
+      renderOrderStatuses();
+      refreshStatusDropdowns();
+      cargarPedidos();
+      showToast('Estado renombrado a: ' + val.trim(), 'success');
+    });
+  } else {
+    orderStatuses[idx] = val.trim();
+    persistOrderStatuses();
+    renderOrderStatuses();
+    refreshStatusDropdowns();
+    showToast('Estado renombrado a: ' + val.trim(), 'success');
+  }
+}
+
+function refreshStatusDropdowns() {
+  const filterSel = document.getElementById('orderStatusFilter');
+  if (filterSel) {
+    const cur = filterSel.value;
+    filterSel.innerHTML = '<option value="">Todos los estados</option>' +
+      orderStatuses.map(s => '<option value="' + esc(s) + '">' + esc(s) + '</option>').join('');
+    filterSel.value = cur;
+  }
+}
 
 document.addEventListener('DOMContentLoaded', () => {
   initSidebar();
@@ -304,6 +383,7 @@ function bindJsonActions() {
     const data = {
       productos: productosEditables,
       config: (() => { try { return JSON.parse(localStorage.getItem('vertice-admin-config') || '{}'); } catch(e) { return {}; } })(),
+      orderStatuses,
       pedidos: (() => { try { return JSON.parse(localStorage.getItem('vertice-pedidos') || '[]'); } catch(e) { return []; } })(),
       exportDate: new Date().toISOString(),
     };
@@ -336,6 +416,10 @@ function bindJsonActions() {
         if (data.config && typeof data.config === 'object') {
           localStorage.setItem('vertice-admin-config', JSON.stringify(data.config));
         }
+        if (data.orderStatuses && Array.isArray(data.orderStatuses)) {
+          orderStatuses = data.orderStatuses;
+          persistOrderStatuses();
+        }
         cargarProductos();
         cargarPedidos();
         cargarConfig();
@@ -354,6 +438,8 @@ function bindJsonActions() {
       localStorage.removeItem('vertice-productos');
       localStorage.removeItem('vertice-pedidos');
       localStorage.removeItem('vertice-admin-config');
+      localStorage.removeItem('vertice-order-statuses');
+      orderStatuses = ['Pendiente', 'Confirmado', 'En Preparacion', 'Enviado', 'Entregado', 'Cancelado'];
       cargarProductos();
       cargarPedidos();
       cargarConfig();
@@ -414,12 +500,7 @@ function cargarPedidos() {
         <button class="btn btn-sm btn-ghost" onclick="verPedido(${origIdx})" title="Ver detalle">👁️</button>
         <select class="status-select" onchange="cambiarEstadoPedido(${origIdx}, this.value)">
           <option value="">Cambiar</option>
-          <option value="Pendiente">Pendiente</option>
-          <option value="Confirmado">Confirmado</option>
-          <option value="En Preparacion">En Preparación</option>
-          <option value="Enviado">Enviado</option>
-          <option value="Entregado">Entregado</option>
-          <option value="Cancelado">Cancelado</option>
+          ${orderStatuses.map(s => '<option value="' + esc(s) + '"' + (estado === s ? ' selected' : '') + '>' + esc(s) + '</option>').join('')}
         </select>
       </td>
     </tr>`;
@@ -483,6 +564,10 @@ function cargarConfig() {
     document.getElementById('cfg-whatsapp').value = cfg.whatsapp || '549XXXXXXXXXX';
     document.getElementById('cfg-delivery').value = cfg.delivery || '';
   } catch (e) {}
+  const saved = JSON.parse(localStorage.getItem('vertice-order-statuses') || 'null');
+  if (saved && Array.isArray(saved)) orderStatuses = saved;
+  renderOrderStatuses();
+  refreshStatusDropdowns();
 }
 
 function bindConfig() {
@@ -492,6 +577,8 @@ function bindConfig() {
       delivery: document.getElementById('cfg-delivery').value.trim(),
     };
     localStorage.setItem('vertice-admin-config', JSON.stringify(cfg));
+    persistOrderStatuses();
+    refreshStatusDropdowns();
     showToast('Configuración guardada', 'success');
   });
 }

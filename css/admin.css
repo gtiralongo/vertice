@@ -287,6 +287,12 @@ tr:hover td { background: var(--verde-light); }
 .status-Entregado::before { background: #059669; }
 .status-Cancelado { background: #FEE2E2; color: #991B1B; }
 .status-Cancelado::before { background: #EF4444; }
+.status-badge:not([class*="status-Pendiente"]):not([class*="status-Confirmado"]):not([class*="status-EnPreparacion"]):not([class*="status-Enviado"]):not([class*="status-Entregado"]):not([class*="status-Cancelado"]) {
+  background: #F3F4F6; color: #374151;
+}
+.status-badge:not([class*="status-Pendiente"]):not([class*="status-Confirmado"]):not([class*="status-EnPreparacion"]):not([class*="status-Enviado"]):not([class*="status-Entregado"]):not([class*="status-Cancelado"])::before {
+  background: #6B7280;
+}
 
 /* ===== EMPTY STATE ===== */
 .empty-state { text-align: center; padding: 60px 20px; }
